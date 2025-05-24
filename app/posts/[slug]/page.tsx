@@ -1,87 +1,17 @@
-import { Heart, Calendar, Eye, Share2, MessageCircle, ThumbsUp, ArrowLeft, Tag } from "lucide-react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import Link from "next/link"
-import { notFound } from "next/navigation"
+import { Heart, Calendar, Eye, Share2, MessageCircle, ThumbsUp, ArrowLeft, Tag } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import fs from "fs"; // ファイルシステムを操作するNode.jsモジュール
+import path from "path"; // パスを操作するNode.jsモジュール
+import matter from "gray-matter"; // フロントマターをパースするライブラリ
+import { MDXRemote } from "next-mdx-remote/rsc"; // next-mdx-remote の RSC (React Server Components) 対応版
 
-// サンプル記事データ
-const posts = {
-  "youtuber-new-project-viral": {
-    id: 1,
-    title: "話題のYouTuber新企画が大反響！視聴者数が過去最高を記録",
-    content: `
-      <p>人気YouTuberの新しい企画動画が公開されてから24時間で100万回再生を突破し、ファンからは絶賛の声が続々と寄せられています。</p>
-      
-      <h2>企画の詳細</h2>
-      <p>今回の企画は、視聴者からのリクエストに応える形で実現したもので、これまでにない斬新なアイデアが話題となっています。動画では、普段見ることのできない舞台裏の様子や、制作過程での苦労話なども赤裸々に語られており、ファンにとっては貴重な内容となっています。</p>
-      
-      <h2>ファンの反応</h2>
-      <p>コメント欄には「感動した！」「次回も楽しみ！」といった好意的な意見が多数寄せられており、SNSでも大きな話題となっています。特に、企画の最後に明かされたサプライズ発表には、多くのファンが驚きと喜びの声を上げています。</p>
-      
-      <h2>今後の展開</h2>
-      <p>この成功を受けて、今後も定期的に同様の企画を実施していく予定とのことです。また、他のクリエイターとのコラボレーション企画も検討されており、さらなる盛り上がりが期待されています。</p>
-      
-      <p>YouTuber業界全体にとっても、新しい企画の可能性を示す重要な事例となりそうです。視聴者との距離を縮める新しい形のコンテンツとして、今後の動向に注目が集まっています。</p>
-    `,
-    excerpt: "人気YouTuberの新しい企画動画が公開されてから24時間で100万回再生を突破。ファンからは絶賛の声が...",
-    category: "YouTuber",
-    views: "1.2M",
-    date: "2024年1月15日",
-    publishedAt: "2024-01-15T10:00:00Z",
-    image: "/placeholder.svg?height=400&width=800",
-    tags: ["YouTuber", "バズ", "企画", "エンタメ"],
-    readTime: "3分",
-    author: "トレンドカフェ編集部",
-  },
-  "celebrity-couple-dating-rumors": {
-    id: 2,
-    title: "芸能界に新たなカップル誕生？熱愛報道の真相に迫る",
-    content: `
-      <p>人気俳優と女優の熱愛が報じられ、ファンの間で大きな話題となっています。二人の関係性について詳しく調査しました。</p>
-      
-      <h2>報道の経緯</h2>
-      <p>今回の熱愛報道は、週刊誌のスクープ記事から始まりました。都内の高級レストランでの密会の様子が撮影され、親密な関係であることが明らかになりました。</p>
-      
-      <h2>ファンの反応</h2>
-      <p>ファンからは祝福の声が多数寄せられている一方で、驚きの声も上がっています。SNSでは関連するハッシュタグがトレンド入りするなど、大きな注目を集めています。</p>
-    `,
-    excerpt: "人気俳優と女優の熱愛が報じられ、ファンの間で大きな話題となっています。二人の関係性について詳しく...",
-    category: "芸能",
-    views: "890K",
-    date: "2024年1月14日",
-    publishedAt: "2024-01-14T15:30:00Z",
-    image: "/placeholder.svg?height=400&width=800",
-    tags: ["芸能", "熱愛", "俳優", "女優"],
-    readTime: "2分",
-    author: "トレンドカフェ編集部",
-  },
-  "spring-fashion-trends-2024": {
-    id: 3,
-    title: "今年のトレンドファッションを先取り！春の注目アイテム",
-    content: `
-      <p>2024年春のファッショントレンドが続々と発表されています。今年注目すべきアイテムとコーディネート術をご紹介します。</p>
-      
-      <h2>注目のカラー</h2>
-      <p>今年の春は、パステルカラーが大注目です。特にラベンダーやミントグリーンなどの優しい色合いが人気を集めています。</p>
-      
-      <h2>マストハブアイテム</h2>
-      <p>この春絶対に手に入れたいアイテムをピックアップしました。トレンドを取り入れながらも、長く愛用できるアイテムを中心にご紹介します。</p>
-    `,
-    excerpt: "2024年春のファッショントレンドが続々と発表されています。今年注目すべきアイテムとコーディネート術を...",
-    category: "ファッション",
-    views: "654K",
-    date: "2024年1月13日",
-    publishedAt: "2024-01-13T12:00:00Z",
-    image: "/placeholder.svg?height=400&width=800",
-    tags: ["ファッション", "トレンド", "春", "コーディネート"],
-    readTime: "4分",
-    author: "トレンドカフェ編集部",
-  },
-}
-
-// 関連記事データ
+// 関連記事データ（これはMDXファイルから取得しないので、そのまま残します）
+// 必要に応じて、こちらもMDXファイルから動的に取得するように拡張することも可能です。
 const relatedPosts = [
   {
     id: 4,
@@ -111,14 +41,60 @@ const relatedPosts = [
     image: "/placeholder.svg?height=150&width=200",
     slug: "kpop-artists-2024",
   },
-]
+];
 
-export default function PostPage({ params }: { params: { slug: string } }) {
-  const post = posts[params.slug as keyof typeof posts]
+// getStaticPaths の代替として、Next.js 13+ の App Router では generateStaticParams を使用します。
+// これにより、ビルド時にすべての記事ページを静的に生成します。
+export async function generateStaticParams() {
+  const postsDirectory = path.join(process.cwd(), 'app', 'posts'); // postsディレクトリのパス
+  const filenames = fs.readdirSync(postsDirectory); // ディレクトリ内のすべてのファイル名を取得
 
-  if (!post) {
-    notFound()
+  return filenames.map((filename) => ({
+    slug: filename.replace(/\.mdx$/, ''), // .mdx拡張子を除去してslugを生成
+  }));
+}
+
+// 記事データを取得する関数
+async function getPost(slug: string) {
+  const filePath = path.join(process.cwd(), 'app', 'posts', `${slug}.mdx`);
+
+  // ファイルが存在しない場合は404
+  if (!fs.existsSync(filePath)) {
+    return null;
   }
+
+  const fileContent = fs.readFileSync(filePath, 'utf8');
+  const { data, content } = matter(fileContent); // フロントマターとコンテンツをパース
+
+  return {
+    frontmatter: data, // メタデータ
+    content, // MDXコンテンツ
+  };
+}
+
+// 記事のメタデータの型定義
+interface PostFrontmatter {
+  title: string;
+  excerpt: string;
+  category: string;
+  views: string;
+  date: string;
+  publishedAt: string;
+  image: string;
+  tags: string[];
+  readTime: string;
+  author: string;
+}
+
+export default async function PostPage({ params }: { params: { slug: string } }) {
+  const postData = await getPost(params.slug);
+
+  if (!postData) {
+    notFound();
+  }
+
+  const post = postData.frontmatter as PostFrontmatter; // フロントマターを型付け
+  const mdxSource = postData.content; // MDXコンテンツ
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50">
@@ -203,10 +179,10 @@ export default function PostPage({ params }: { params: { slug: string } }) {
 
             {/* Article Body */}
             <div className="prose prose-lg max-w-none mb-8">
-              <div
-                className="text-gray-700 leading-relaxed space-y-4"
-                dangerouslySetInnerHTML={{ __html: post.content }}
-              />
+              {/* dangerouslySetInnerHTML の代わりに MDXRemote を使用 */}
+              <div className="text-gray-700 leading-relaxed space-y-4">
+                <MDXRemote source={mdxSource} />
+              </div>
             </div>
 
             {/* Tags */}
@@ -309,7 +285,7 @@ export default function PostPage({ params }: { params: { slug: string } }) {
                 <CardContent>
                   <div className="space-y-6">
                     {relatedPosts.map((relatedPost) => (
-                      <div key={relatedPost.id} className="group cursor-pointer">
+                      <Link key={relatedPost.id} href={`/posts/${relatedPost.slug}`} className="group cursor-pointer">
                         <div className="space-y-3">
                           <img
                             src={relatedPost.image || "/placeholder.svg"}
@@ -325,7 +301,7 @@ export default function PostPage({ params }: { params: { slug: string } }) {
                             </Badge>
                           </div>
                         </div>
-                      </div>
+                      </Link>
                     ))}
                   </div>
                 </CardContent>
@@ -392,5 +368,5 @@ export default function PostPage({ params }: { params: { slug: string } }) {
         </div>
       </footer>
     </div>
-  )
+  );
 }
