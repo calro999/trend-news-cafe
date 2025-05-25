@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { Heart, Calendar, Eye, Tag } from "lucide-react"; // Heartも必要に応じて残します (Heroセクションで使用する可能性)
+import { Heart, Calendar, Eye, Tag } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator"; // Separatorを追加
-import fs from "fs"; // ファイルシステムを操作するNode.jsモジュール
-import path from "path"; // パスを操作するNode.jsモジュール
-import matter from "gray-matter"; // フロントマターをパースするライブラリ
+import { Separator } from "@/components/ui/separator";
+import fs from "fs";
+import path from "path";
+import matter from "gray-matter";
 
 // 記事のメタデータの型定義 (app/posts/[slug]/page.tsx と同じもの)
 interface PostFrontmatter {
@@ -15,7 +15,7 @@ interface PostFrontmatter {
   category: string;
   views: string;
   date: string;
-  publishedAt: string; // ソート用に追加
+  publishedAt: string;
   image: string;
   tags: string[];
   readTime: string;
@@ -87,14 +87,11 @@ const latestInfoPosts = [
 
 
 export default async function HomePage() {
-  // すべての記事のメタデータを取得
   const posts = await getAllPostsMeta();
 
-  // 主要な記事（最新の1つ）とそれ以外の記事に分ける
   const featuredPost = posts[0];
-  const otherPosts = posts.slice(1, 7); // 最新の6記事をトップに表示（featuredを除いた6つ）
+  const otherPosts = posts.slice(1, 7);
 
-  // Popular Tags は現状ハードコードのままですが、将来的に動的にすることも可能です。
   const popularTags = ["YouTuber", "芸能", "ファッション", "音楽", "ドラマ", "バラエティ", "SNS", "トレンド"];
 
   return (
@@ -102,7 +99,8 @@ export default async function HomePage() {
       {/* Header は app/layout.tsx でレンダリングされます */}
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8 max-w-6xl">
+      {/* ★変更箇所1: max-w-6xl を max-w-7xl に変更し、ページの全体幅を広げます */}
+      <main className="container mx-auto px-4 py-8 max-w-7xl">
         {/* 今話題のトレンド情報をお届け (ヒーローセクション) */}
         <section className="text-center py-12 mb-12 bg-white/60 backdrop-blur-sm rounded-lg shadow-lg">
           <h2 className="text-3xl md:text-5xl font-extrabold text-gray-900 mb-4 bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
@@ -125,9 +123,11 @@ export default async function HomePage() {
         </section>
 
         {/* 注目記事セクションと最新情報サイドバー */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* ★変更箇所2: lg:grid-cols-3 を lg:grid-cols-4 に変更します */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* 注目記事 (左側) */}
-          <div className="lg:col-span-2 space-y-8">
+          {/* ★変更箇所3: lg:col-span-2 を lg:col-span-3 に変更し、メインコンテンツの幅を広げます */}
+          <div className="lg:col-span-3 space-y-8">
             <h3 className="text-xl md:text-2xl font-bold text-gray-800 bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent flex items-center space-x-2">
               <span className="text-pink-500">★</span>
               <span>注目記事</span>
@@ -174,16 +174,10 @@ export default async function HomePage() {
                 </CardContent>
               </Card>
             )}
-            {/* ここに他の注目記事がある場合、追加します。
-                例えば、posts.slice(0, N) の N を調整して、FeaturedPost を含め複数の注目記事をここに表示するようにします。
-                ただし、現在このセクションにはfeaturedPost 1つしかありません。
-                元のスクリーンショットに他の記事があった場合、その表示ロジックは別のコンポーネントか、
-                この `app/page.tsx` のこの部分のコードが省略されている可能性があります。
-                今回は、一旦featuredPostのみとしています。
-            */}
           </div>
 
           {/* 最新情報サイドバー (右側) */}
+          {/* ★変更なし: lg:col-span-1 を維持することで、相対的に幅が広がります */}
           <div className="lg:col-span-1">
             <Card className="bg-white/80 backdrop-blur-sm border-pink-100 sticky top-24">
               <CardHeader>
@@ -261,7 +255,7 @@ export default async function HomePage() {
         {/* View All Posts Button */}
         {posts.length > 7 && (
           <div className="text-center mt-12">
-            <Link href="/posts"> {/* 全ての記事一覧ページへのリンクを仮定 */}
+            <Link href="/posts">
               <Button variant="outline" className="bg-white border-pink-200 text-pink-600 hover:bg-pink-50 hover:text-pink-700">
                 すべての記事を見る
               </Button>
