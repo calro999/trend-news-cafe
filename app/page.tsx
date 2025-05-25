@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
+import { Star } from "lucide-react";
 
 import * as newsArticles from "@/app/news/articles/index";
 import * as entArticles from "@/app/entertainment/articles/index";
@@ -101,46 +103,43 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="grid md:grid-cols-[1fr_300px] gap-8">
-        <div>
-          <h2 className="text-xl font-bold text-pink-600 mb-4">人気記事ランキング</h2>
-          <div className="grid gap-6">
+      <section className="w-full max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="md:col-span-2">
+          <h2 className="flex items-center text-pink-600 font-bold text-xl mb-4">
+            <Star className="mr-2 fill-pink-500 text-white" /> 人気記事ランキング
+          </h2>
+
+          <div className="space-y-6">
             {popularArticles.map((article, index) => (
-              <Link
-                key={article?.id}
-                href={article?.url || "#"}
-                className="flex bg-white rounded-lg shadow hover:bg-pink-50 transition overflow-hidden"
-              >
-                <div className="relative w-32 h-24 flex-shrink-0">
-                  {article?.image && (
-                    <Image
-                      src={article.image}
-                      alt="記事画像"
-                      fill
-                      className="object-cover rounded-l-lg"
-                    />
-                  )}
+              <div key={article.id} className="flex flex-col md:flex-row overflow-hidden bg-white rounded-lg shadow">
+                <div className="w-full md:w-1/3 h-60 relative">
+                  <Image
+                    src={article.image}
+                    alt="記事画像"
+                    fill
+                    className="object-cover rounded-l-lg"
+                  />
                 </div>
-                <div className="p-4 flex-1">
-                  <span className="text-sm text-pink-400 font-bold">#{index + 1}</span>
-                  <h3 className="text-base font-semibold text-gray-800 leading-snug">
-                    {article?.title}
-                  </h3>
-                  <div className="flex flex-wrap gap-2 mt-1">
-                    {(article?.tags || []).slice(0, 2).map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-xs bg-pink-100 text-pink-600 px-2 py-0.5 rounded-full"
-                      >
-                        #{tag}
+                <div className="p-4 flex flex-col justify-between md:w-2/3">
+                  <div>
+                    <div className="flex gap-2 mb-2">
+                      <Badge variant="outline" className="bg-pink-100 text-pink-600">
+                        {article.category}
+                      </Badge>
+                      <span className="text-sm text-gray-500">
+                        {new Date(article.publishedAt).toLocaleDateString("ja-JP")}
                       </span>
-                    ))}
+                    </div>
+                    <h3 className="font-bold text-lg mb-1">{article.title}</h3>
+                    <p className="text-sm text-gray-600">{article.description}</p>
                   </div>
-                  <p className="text-xs text-gray-500 mt-1">
-                    {new Date(article?.publishedAt).toLocaleDateString("ja-JP")}
-                  </p>
+                  <div className="mt-4 text-right">
+                    <Link href={article.url || "#"} className="text-pink-600 hover:underline">
+                      続きを読む →
+                    </Link>
+                  </div>
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
         </div>
