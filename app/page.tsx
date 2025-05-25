@@ -25,8 +25,10 @@ export default function HomePage() {
   return (
     <div className="bg-pink-50 py-10 px-4 w-full">
       <section className="text-center mb-10">
-        <h1 className="text-3xl md:text-5xl font-bold text-pink-600">
-          今話題の トレンド情報 をお届け
+        <h1 className="text-3xl md:text-5xl font-bold">
+          <span className="bg-gradient-to-r from-pink-500 via-pink-400 to-pink-600 bg-clip-text text-transparent">
+            今話題の トレンド情報 をお届け
+          </span>
         </h1>
         <p className="mt-4 text-gray-600">
           芸能界からYouTuberまで、様々なジャンルの最新トレンドを可愛く楽しくお伝えします♪
