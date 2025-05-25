@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge"
 import { Star, Flame, User } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import Image from "next/image"
+import articles from "@/data/articles"
 
 export default function Home() {
   return (
@@ -41,35 +42,49 @@ export default function Home() {
             <Star className="mr-2 fill-pink-500 text-white" /> 注目記事
           </h2>
 
-          <Card className="flex flex-col md:flex-row overflow-hidden">
-            <div className="w-full md:w-1/3 h-60 relative">
-              <Image
-                src="/sample.jpg"
-                alt="サンプル画像"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <CardContent className="p-4 flex flex-col justify-between md:w-2/3">
-              <div>
-                <div className="flex gap-2 mb-2">
-                  <Badge variant="outline" className="bg-pink-100 text-pink-600">芸能</Badge>
-                  <span className="text-sm text-gray-500">2分で読める</span>
+          <div className="space-y-6">
+            {articles.map((article) => (
+              <Card key={article.id} className="flex flex-col md:flex-row overflow-hidden">
+                <div className="w-full md:w-1/3 h-60 relative">
+                  <Image
+                    src={article.image}
+                    alt="記事画像"
+                    fill
+                    className="object-cover"
+                  />
                 </div>
-                <h3 className="font-bold text-lg mb-1">
-                  芸能界に新たなカップル誕生？熱愛報道の真相に迫る
-                </h3>
-                <p className="text-sm text-gray-600">
-                  人気俳優と女優の熱愛が報じられ、ファンの間で大きな話題に。関係者によると二人の交際は…
-                </p>
-              </div>
-              <div className="mt-4 text-right">
-                <a href="#" className="text-pink-600 hover:underline">
-                  続きを読む →
-                </a>
-              </div>
-            </CardContent>
-          </Card>
+                <CardContent className="p-4 flex flex-col justify-between md:w-2/3">
+                  <div>
+                    <div className="flex gap-2 mb-2">
+                      <Badge variant="outline" className="bg-pink-100 text-pink-600">{article.category}</Badge>
+                      <span className="text-sm text-gray-500">{article.readTime}</span>
+                    </div>
+                    <h3 className="font-bold text-lg mb-1">
+                      {article.title}
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      {article.description}
+                    </p>
+                  </div>
+                  <div className="mt-4 text-right">
+                    <a href="#" className="text-pink-600 hover:underline">
+                      続きを読む →
+                    </a>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* ページネーション */}
+          <div className="flex justify-between mt-8">
+            <button className="bg-white border border-pink-300 text-pink-600 px-4 py-2 rounded hover:bg-pink-100">
+              ＜ 前のページ
+            </button>
+            <button className="bg-white border border-pink-300 text-pink-600 px-4 py-2 rounded hover:bg-pink-100">
+              次のページ ＞
+            </button>
+          </div>
         </div>
 
         {/* サイドバー */}
