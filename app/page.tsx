@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { Heart, Calendar, Eye, Tag } from "lucide-react";
+import { Heart, Calendar, Eye, Tag } from "lucide-react"; // Heartも必要に応じて残します (Heroセクションで使用する可能性)
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator"; // Separatorを追加
 import fs from "fs"; // ファイルシステムを操作するNode.jsモジュール
 import path from "path"; // パスを操作するNode.jsモジュール
 import matter from "gray-matter"; // フロントマターをパースするライブラリ
@@ -27,24 +28,63 @@ async function getAllPostsMeta() {
   const filenames = fs.readdirSync(postsDirectory);
 
   const posts = filenames
-    .filter(filename => filename.endsWith('.mdx')) // ★この行を追加しました！
+    .filter(filename => filename.endsWith('.mdx'))
     .map((filename) => {
       const filePath = path.join(postsDirectory, filename);
       const fileContent = fs.readFileSync(filePath, 'utf8');
-      const { data } = matter(fileContent); // フロントマターのみ取得
+      const { data } = matter(fileContent);
 
       return {
-        slug: filename.replace(/\.mdx$/, ''), // スラッグ (ファイル名から拡張子を除去)
-        ...(data as PostFrontmatter), // フロントマターのデータを展開
+        slug: filename.replace(/\.mdx$/, ''),
+        ...(data as PostFrontmatter),
       };
     })
     .sort((a, b) => {
-      // 公開日で降順にソート (新しい記事が上に来るように)
       return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
     });
 
   return posts;
 }
+
+// 最新情報サイドバー用のダミーデータ (必要に応じて、MDXから動的に取得するように変更も可能です)
+const latestInfoPosts = [
+  {
+    id: 1,
+    title: "人気アイドルグループの新作曲がオリコン1位獲得",
+    category: "芸能",
+    time: "2時間前",
+    slug: "idol-group-no1",
+  },
+  {
+    id: 2,
+    title: "バラエティ番組で話題のあの人が写真集発売決定",
+    category: "エンタメ",
+    time: "4時間前",
+    slug: "variety-show-photo-book",
+  },
+  {
+    id: 3,
+    title: "TikTokでバズり中のダンスチャレンジとは？",
+    category: "SNS",
+    time: "6時間前",
+    slug: "tiktok-dance-challenge",
+  },
+  {
+    id: 4,
+    title: "人気YouTuberコラボ企画の裏側を大公開",
+    category: "YouTuber",
+    time: "8時間前",
+    slug: "youtuber-collab-behind-scenes",
+  },
+  {
+    id: 5,
+    title: "今週のドラマ視聴率ランキング発表",
+    category: "ドラマ",
+    time: "10時間前",
+    slug: "drama-ratings",
+  },
+];
+
 
 export default async function HomePage() {
   // すべての記事のメタデータを取得
@@ -59,78 +99,116 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50">
-      {/* Header */}
-      <header className="bg-white/80 backdrop-blur-sm border-b border-pink-100 sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-center md:justify-start">
-            <Link href="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-pink-400 to-purple-400 rounded-full flex items-center justify-center">
-                <Heart className="w-4 h-4 text-white" />
-              </div>
-              <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
-                トレンドカフェ
-              </h1>
-            </Link>
-          </div>
-        </div>
-      </header>
+      {/* Header は app/layout.tsx でレンダリングされます */}
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8 max-w-6xl">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Featured Post (最新記事) */}
-          {featuredPost && (
-            <Card className="lg:col-span-2 bg-white/80 backdrop-blur-sm border-pink-100 overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <Link href={`/posts/${featuredPost.slug}`}>
-                <img
-                  src={featuredPost.image || "/placeholder.svg"}
-                  alt={featuredPost.title}
-                  className="w-full h-64 object-cover"
-                />
-              </Link>
-              <CardContent className="p-6">
-                <div className="flex items-center space-x-2 mb-3">
-                  <Badge className="bg-gradient-to-r from-pink-400 to-purple-400 text-white">{featuredPost.category}</Badge>
-                  <span className="text-sm text-gray-500">{featuredPost.readTime}で読める</span>
-                </div>
-                <Link href={`/posts/${featuredPost.slug}`}>
-                  <CardTitle className="text-2xl md:text-3xl font-bold text-gray-800 mb-3 leading-tight hover:text-pink-600 transition-colors">
-                    {featuredPost.title}
-                  </CardTitle>
-                </Link>
-                <CardDescription className="text-gray-600 text-base mb-4 line-clamp-3">
-                  {featuredPost.excerpt}
-                </CardDescription>
-                <div className="flex items-center text-sm text-gray-500 space-x-4">
-                  <div className="flex items-center">
-                    <Calendar className="w-4 h-4 mr-1" />
-                    {featuredPost.date}
-                  </div>
-                  <div className="flex items-center">
-                    <Eye className="w-4 h-4 mr-1" />
-                    {featuredPost.views} 回閲覧
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
+        {/* 今話題のトレンド情報をお届け (ヒーローセクション) */}
+        <section className="text-center py-12 mb-12 bg-white/60 backdrop-blur-sm rounded-lg shadow-lg">
+          <h2 className="text-3xl md:text-5xl font-extrabold text-gray-900 mb-4 bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
+            今話題のトレンド情報をお届け
+          </h2>
+          <p className="text-lg md:text-xl text-gray-700 max-w-3xl mx-auto mb-8">
+            芸能界からYouTuberまで、様々なジャンルの最新トレンドを可愛く楽しくお伝えします♪
+          </p>
+          <div className="flex flex-wrap justify-center gap-2">
+            {popularTags.map((tag, index) => (
+              <Badge
+                key={index}
+                variant="secondary"
+                className="bg-pink-100 text-pink-700 hover:bg-pink-200 cursor-pointer text-sm py-1 px-3"
+              >
+                #{tag}
+              </Badge>
+            ))}
+          </div>
+        </section>
 
-          {/* Popular Tags Sidebar */}
+        {/* 注目記事セクションと最新情報サイドバー */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* 注目記事 (左側) */}
+          <div className="lg:col-span-2 space-y-8">
+            <h3 className="text-xl md:text-2xl font-bold text-gray-800 bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent flex items-center space-x-2">
+              <span className="text-pink-500">★</span>
+              <span>注目記事</span>
+            </h3>
+            {featuredPost && (
+              <Card className="bg-white/80 backdrop-blur-sm border-pink-100 overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <Link href={`/posts/${featuredPost.slug}`}>
+                  <img
+                    src={featuredPost.image || "/placeholder.svg"}
+                    alt={featuredPost.title}
+                    className="w-full h-64 object-cover"
+                  />
+                </Link>
+                <CardContent className="p-6">
+                  <div className="flex items-center space-x-2 mb-3">
+                    <Badge className="bg-gradient-to-r from-pink-400 to-purple-400 text-white">{featuredPost.category}</Badge>
+                    <span className="text-sm text-gray-500">{featuredPost.readTime}で読める</span>
+                  </div>
+                  <Link href={`/posts/${featuredPost.slug}`}>
+                    <CardTitle className="text-2xl md:text-3xl font-bold text-gray-800 mb-3 leading-tight hover:text-pink-600 transition-colors">
+                      {featuredPost.title}
+                    </CardTitle>
+                  </Link>
+                  <CardDescription className="text-gray-600 text-base mb-4 line-clamp-3">
+                    {featuredPost.excerpt}
+                  </CardDescription>
+                  <div className="flex items-center text-sm text-gray-500 space-x-4">
+                    <div className="flex items-center">
+                      <Calendar className="w-4 h-4 mr-1" />
+                      {featuredPost.date}
+                    </div>
+                    <div className="flex items-center">
+                      <Eye className="w-4 h-4 mr-1" />
+                      {featuredPost.views} 回閲覧
+                    </div>
+                  </div>
+                  <div className="text-right mt-4">
+                    <Link href={`/posts/${featuredPost.slug}`}>
+                      <Button variant="link" className="text-pink-600 hover:text-pink-800">
+                        続きを読む →
+                      </Button>
+                    </Link>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+            {/* ここに他の注目記事がある場合、追加します。
+                例えば、posts.slice(0, N) の N を調整して、FeaturedPost を含め複数の注目記事をここに表示するようにします。
+                ただし、現在このセクションにはfeaturedPost 1つしかありません。
+                元のスクリーンショットに他の記事があった場合、その表示ロジックは別のコンポーネントか、
+                この `app/page.tsx` のこの部分のコードが省略されている可能性があります。
+                今回は、一旦featuredPostのみとしています。
+            */}
+          </div>
+
+          {/* 最新情報サイドバー (右側) */}
           <div className="lg:col-span-1">
             <Card className="bg-white/80 backdrop-blur-sm border-pink-100 sticky top-24">
               <CardHeader>
-                <CardTitle className="text-xl">人気タグ</CardTitle>
+                <CardTitle className="text-xl flex items-center space-x-2">
+                  <span className="text-pink-500">~</span>
+                  <span>最新情報</span>
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex flex-wrap gap-2">
-                  {popularTags.map((tag, index) => (
-                    <Badge
-                      key={index}
-                      variant="secondary"
-                      className="bg-pink-100 text-pink-700 hover:bg-pink-200 cursor-pointer text-sm"
-                    >
-                      #{tag}
-                    </Badge>
+                <div className="space-y-4">
+                  {latestInfoPosts.map((info) => (
+                    <div key={info.id}>
+                      <Link href={`/posts/${info.slug}`} className="block hover:text-pink-600 transition-colors">
+                        <h4 className="text-base font-medium text-gray-800 line-clamp-2">
+                          {info.title}
+                        </h4>
+                      </Link>
+                      <div className="flex items-center text-sm text-gray-500 mt-1">
+                        <Badge variant="outline" className="text-xs mr-2 border-pink-200 text-pink-600">
+                          {info.category}
+                        </Badge>
+                        <span className="text-xs">{info.time}</span>
+                      </div>
+                      <Separator className="mt-4 bg-pink-100" />
+                    </div>
                   ))}
                 </div>
               </CardContent>
@@ -138,7 +216,7 @@ export default async function HomePage() {
           </div>
         </div>
 
-        {/* Other Posts Grid */}
+        {/* Other Posts Grid (最新のトレンド記事) */}
         <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mt-12 mb-8 text-center bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
           最新のトレンド記事
         </h2>
@@ -181,31 +259,18 @@ export default async function HomePage() {
         </div>
 
         {/* View All Posts Button */}
-        {posts.length > 7 && ( // 表示されていない記事がある場合にのみ表示
+        {posts.length > 7 && (
           <div className="text-center mt-12">
-            <Button variant="outline" className="bg-white border-pink-200 text-pink-600 hover:bg-pink-50 hover:text-pink-700">
-              すべての記事を見る
-            </Button>
+            <Link href="/posts"> {/* 全ての記事一覧ページへのリンクを仮定 */}
+              <Button variant="outline" className="bg-white border-pink-200 text-pink-600 hover:bg-pink-50 hover:text-pink-700">
+                すべての記事を見る
+              </Button>
+            </Link>
           </div>
         )}
       </main>
 
-      {/* Footer */}
-      <footer className="bg-white/90 backdrop-blur-sm border-t border-pink-100 py-8 md:py-12 mt-12">
-        <div className="container mx-auto px-4 text-center">
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <div className="w-6 h-6 bg-gradient-to-r from-pink-400 to-purple-400 rounded-full flex items-center justify-center">
-              <Heart className="w-3 h-3 text-white" />
-            </div>
-            <span className="text-lg font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
-              トレンドカフェ
-            </span>
-          </div>
-          <p className="text-gray-600 text-sm">
-            © 2024 トレンドカフェ. All rights reserved. 最新のトレンド情報をお届けします♪
-          </p>
-        </div>
-      </footer>
+      {/* Footer は app/layout.tsx でレンダリングされます */}
     </div>
   );
 }
