@@ -21,7 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body className={inter.className}>
+      <body className={inter.className} style={{ maxWidth: "100%", margin: 0, padding: 0 }}>
         {/* Header */}
         <header className="bg-white/80 backdrop-blur-sm border-b border-pink-100 sticky top-0 z-50">
           <div className="w-full max-w-screen-xl mx-auto px-4 py-4 flex items-center justify-between">
@@ -44,7 +44,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
         </header>
 
-        <main>{children}</main>
+        <main style={{ maxWidth: "100%", margin: 0, padding: 0 }}>{children}</main>
 
         {/* Footer */}
         <footer className="bg-white/90 backdrop-blur-sm border-t border-pink-100 py-8 md:py-12 mt-12">
