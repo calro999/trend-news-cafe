@@ -99,7 +99,7 @@ export default async function HomePage() {
       {/* Header は app/layout.tsx でレンダリングされます */}
 
       {/* Main Content */}
-      {/* ★変更箇所1: max-w-6xl を max-w-7xl に変更し、ページの全体幅を広げます */}
+      {/* ★元のコード: max-w-6xl を max-w-7xl に変更し、ページの全体幅を広げます */}
       <main className="container mx-auto px-4 py-8 max-w-7xl">
         {/* 今話題のトレンド情報をお届け (ヒーローセクション) */}
         <section className="text-center py-12 mb-12 bg-white/60 backdrop-blur-sm rounded-lg shadow-lg">
@@ -123,10 +123,10 @@ export default async function HomePage() {
         </section>
 
         {/* 注目記事セクションと最新情報サイドバー */}
-        {/* ★変更箇所2: lg:grid-cols-3 を lg:grid-cols-4 に変更します */}
+        {/* ★元のコード: lg:grid-cols-3 を lg:grid-cols-4 に変更します */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* 注目記事 (左側) */}
-          {/* ★変更箇所3: lg:col-span-2 を lg:col-span-3 に変更し、メインコンテンツの幅を広げます */}
+          {/* ★元のコード: lg:col-span-2 を lg:col-span-3 に変更し、メインコンテンツの幅を広げます */}
           <div className="lg:col-span-3 space-y-8">
             <h3 className="text-xl md:text-2xl font-bold text-gray-800 bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent flex items-center space-x-2">
               <span className="text-pink-500">★</span>
@@ -177,7 +177,7 @@ export default async function HomePage() {
           </div>
 
           {/* 最新情報サイドバー (右側) */}
-          {/* ★変更なし: lg:col-span-1 を維持することで、相対的に幅が広がります */}
+          {/* ★元のコード: lg:col-span-1 を維持することで、相対的に幅が広がります */}
           <div className="lg:col-span-1">
             <Card className="bg-white/80 backdrop-blur-sm border-pink-100 sticky top-24">
               <CardHeader>
