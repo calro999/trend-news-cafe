@@ -3,23 +3,12 @@ import { Star, Flame, User } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import Image from "next/image"
 
-async function getArticles() {
-  const basePath = "https://your-domain.com/news" // ← 本番用に適切に変更（例: process.env.NEXT_PUBLIC_SITE_URL）
-  const filenames = ["news1.json", "news2.json"] // 自動化したい場合は API でファイル一覧を返す必要あり
+import news1 from "./articles/news1.json"
+import news2 from "./articles/news2.json"
 
-  const results = await Promise.all(
-    filenames.map(async (name) => {
-      const res = await fetch(`${basePath}/${name}`)
-      return res.json()
-    })
-  )
+const articles = [news1, news2].sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
 
-  return results.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
-}
-
-export default async function NewsPage() {
-  const articles = await getArticles()
-
+export default function NewsPage() {
   return (
     <div className="bg-pink-50 py-10 px-4 w-full">
       <section className="text-center mb-10">
