@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { Star } from "lucide-react";
+import { Star, Flame, User } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 
 import * as newsArticles from "@/app/news/articles/index";
 import * as entArticles from "@/app/entertainment/articles/index";
@@ -111,56 +112,74 @@ export default function HomePage() {
 
           <div className="space-y-6">
             {popularArticles.map((article, index) => (
-              <div key={article.id} className="flex flex-col md:flex-row overflow-hidden bg-white rounded-lg shadow">
+              <Card key={article.id} className="flex flex-col md:flex-row overflow-hidden">
                 <div className="w-full md:w-1/3 h-60 relative">
                   <Image
                     src={article.image}
                     alt="記事画像"
                     fill
-                    className="object-cover rounded-l-lg"
+                    className="object-cover"
                   />
                 </div>
-                <div className="p-4 flex flex-col justify-between md:w-2/3">
+                <CardContent className="p-4 flex flex-col justify-between md:w-2/3">
                   <div>
                     <div className="flex gap-2 mb-2">
-                      <Badge variant="outline" className="bg-pink-100 text-pink-600">
-                        {article.category}
-                      </Badge>
-                      <span className="text-sm text-gray-500">
-                        {new Date(article.publishedAt).toLocaleDateString("ja-JP")}
-                      </span>
+                      <Badge variant="outline" className="bg-pink-100 text-pink-600">{article.category}</Badge>
+                      <span className="text-sm text-gray-500">{article.readTime || "1分"}</span>
                     </div>
                     <h3 className="font-bold text-lg mb-1">{article.title}</h3>
                     <p className="text-sm text-gray-600">{article.description}</p>
                   </div>
                   <div className="mt-4 text-right">
-                    <Link href={article.url || "#"} className="text-pink-600 hover:underline">
-                      続きを読む →
-                    </Link>
+                    <Link href={article.url || "#"} className="text-pink-600 hover:underline">続きを読む →</Link>
                   </div>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
             ))}
           </div>
         </div>
 
         <aside className="space-y-6">
-          <div className="bg-white p-4 rounded-lg shadow">
-            <h3 className="text-lg font-bold text-pink-600 mb-2">最新情報をお届け</h3>
-            <p className="text-sm text-gray-700">
-              トレンドカフェは、話題のニュースやエンタメ情報を毎日更新中！フォローして最新情報をチェック♪
-            </p>
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow">
-            <h3 className="text-lg font-bold text-pink-600 mb-2">人気カテゴリー</h3>
-            <ul className="text-sm text-gray-700 space-y-1">
-              <li>#エンタメ</li>
-              <li>#ニュース</li>
-              <li>#スポーツ</li>
-              <li>#経済</li>
-              <li>#コラム</li>
+          <Card className="p-4">
+            <h3 className="flex items-center font-bold text-lg text-pink-600 mb-4">
+              <Flame className="w-4 h-4 mr-2 text-pink-600" /> 最新情報をお届け
+            </h3>
+            <ul className="space-y-4 text-sm">
+              {allArticles.slice(0, 5).map((article) => (
+                <li key={article.id} className="flex justify-between items-start">
+                  <div>
+                    {article.title}
+                    <div className="mt-1">
+                      <Badge className="bg-pink-100 text-pink-600">{article.category}</Badge>
+                    </div>
+                  </div>
+                  <span className="text-gray-400 text-xs">{article.time || "1時間前"}</span>
+                </li>
+              ))}
             </ul>
-          </div>
+          </Card>
+
+          <Card className="p-4">
+            <h3 className="flex items-center font-bold text-lg text-pink-600 mb-4">
+              <User className="w-4 h-4 mr-2 text-pink-600" /> 人気カテゴリー
+            </h3>
+            <div className="grid grid-cols-2 gap-2">
+              {["#芸能", "#音楽", "#ドラマ", "#ファッション"].map((tag) => (
+                <span key={tag} className="text-sm border border-pink-200 text-pink-600 rounded-full px-3 py-1">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </Card>
+
+          <Card className="p-6 bg-gradient-to-r from-pink-100 to-pink-200 text-center">
+            <div className="text-pink-600 text-2xl mb-2">♡</div>
+            <p className="font-bold mb-1">最新情報をお届け</p>
+            <p className="text-sm text-gray-600 mb-4">メルマガ登録で芸能ニュースをいち早くゲット！</p>
+            <button className="bg-pink-500 text-white px-4 py-2 rounded-full hover:bg-pink-600 transition">
+              メルマガ登録
+            </button>
+          </Card>
         </aside>
       </section>
     </div>
