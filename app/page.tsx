@@ -116,9 +116,9 @@ export default function HomePage() {
             <Link
               href={article?.url || "#"}
               key={article?.id}
-              className="flex items-start space-x-4 hover:bg-pink-100/40 rounded-lg p-3 transition"
+              className="flex items-start space-x-4 hover:bg-pink-100/40 rounded-lg p-4 transition"
             >
-              <div className="w-24 h-16 relative flex-shrink-0">
+              <div className="w-32 h-20 relative flex-shrink-0">
                 {article?.image && (
                   <Image
                     src={article.image}
@@ -130,9 +130,16 @@ export default function HomePage() {
               </div>
               <div className="flex flex-col">
                 <span className="text-sm text-pink-400 font-bold">#{index + 1}</span>
-                <h3 className="text-sm font-semibold text-gray-800 leading-snug">
+                <h3 className="text-base font-semibold text-gray-800 leading-snug">
                   {article?.title}
                 </h3>
+                <div className="flex flex-wrap gap-2 mt-1">
+                  {(article?.tags || []).slice(0, 2).map((tag) => (
+                    <span key={tag} className="text-xs bg-pink-100 text-pink-600 px-2 py-0.5 rounded-full">
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
                 <span className="text-xs text-gray-500 mt-1">
                   {new Date(article?.publishedAt).toLocaleDateString("ja-JP")}
                 </span>
@@ -149,9 +156,9 @@ export default function HomePage() {
             <Link
               key={article?.id}
               href={article?.url || "#"}
-              className="grid grid-cols-[120px_1fr] gap-4 bg-white/90 hover:bg-white/100 p-4 rounded-lg shadow"
+              className="grid grid-cols-1 sm:grid-cols-[150px_1fr] sm:grid-cols-2 md:grid-cols-[150px_1fr] gap-4 bg-white hover:bg-pink-50 transition p-4 rounded-lg shadow"
             >
-              <div className="relative w-full h-24">
+              <div className="relative w-full h-28 sm:h-24">
                 {article?.image && (
                   <Image
                     src={article.image}
@@ -162,12 +169,15 @@ export default function HomePage() {
                 )}
               </div>
               <div>
-                <h3 className="text-md font-medium text-gray-800">
+                <h3 className="text-base font-medium text-gray-800">
                   {article?.title}
                 </h3>
                 <p className="text-xs text-gray-500 mt-1">
                   {new Date(article?.publishedAt).toLocaleDateString("ja-JP")}
                 </p>
+                <span className="inline-block mt-2 text-sm text-pink-600 font-semibold">
+                  続きを読む →
+                </span>
               </div>
             </Link>
           ))}
