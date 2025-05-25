@@ -23,25 +23,8 @@ const allArticles = [
 const featuredArticles = allArticles.slice(0, 5)
 
 export default function HomePage() {
-  const carouselRef = useRef(null)
-  const [index, setIndex] = useState(0)
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIndex((prev) => (prev + 1) % featuredArticles.length)
-    }, 5000)
-    return () => clearInterval(interval)
-  }, [])
-
-  useEffect(() => {
-    const container = carouselRef.current
-    if (container) {
-      container.scrollTo({ left: container.offsetWidth * index, behavior: "smooth" })
-    }
-  }, [index])
-
   return (
-    <div className="bg-pink-50 py-10 px-0 w-full max-w-screen-2xl mx-auto overflow-x-hidden">
+    <div className="bg-pink-50 py-10 px-0 w-full overflow-x-hidden">
       <style>{`
         .animated-gradient {
           background: linear-gradient(270deg, #f472b6, #ec4899, #8b5cf6, #f472b6);
@@ -81,39 +64,22 @@ export default function HomePage() {
       </section>
 
       <section className="relative overflow-hidden">
-        <div
-          className="flex overflow-x-hidden scroll-smooth snap-x snap-mandatory"
-          ref={carouselRef}
-        >
-          {featuredArticles.map((article, i) => (
-            <div
-              key={article.id}
-              className="flex-shrink-0 w-full snap-start md:w-full relative h-72 md:h-96"
-            >
-              <Image src={article.image} alt="記事画像" fill className="object-cover" />
-              <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-4">
-                <Badge className="bg-pink-500 text-white mb-2">{article.category}</Badge>
-                <h2 className="text-xl font-bold">{article.title}</h2>
+        <div className="flex overflow-x-auto space-x-4 px-4">
+          {featuredArticles.map((article) => (
+            <div key={article.id} className="w-48 flex-shrink-0">
+              <div className="relative w-full h-28">
+                <Image
+                  src={article.image}
+                  alt="記事画像"
+                  fill
+                  className="object-cover rounded-md"
+                />
               </div>
+              <p className="text-sm mt-2 text-center text-gray-700">
+                {article.title.slice(0, 10)}
+              </p>
             </div>
           ))}
-        </div>
-
-        <div className="absolute inset-y-0 left-0 flex items-center px-4">
-          <button
-            onClick={() => setIndex((index - 1 + featuredArticles.length) % featuredArticles.length)}
-            className="bg-white/70 hover:bg-white text-pink-600 rounded-full p-2 shadow"
-          >
-            <ArrowLeft />
-          </button>
-        </div>
-        <div className="absolute inset-y-0 right-0 flex items-center px-4">
-          <button
-            onClick={() => setIndex((index + 1) % featuredArticles.length)}
-            className="bg-white/70 hover:bg-white text-pink-600 rounded-full p-2 shadow"
-          >
-            <ArrowRight />
-          </button>
         </div>
       </section>
     </div>
