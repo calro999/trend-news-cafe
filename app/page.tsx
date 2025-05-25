@@ -67,7 +67,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* サイドバーなど追加可能 */}
+        {/* サイドバー */}
         <aside className="space-y-6">
           <Card className="p-4">
             <h3 className="flex items-center font-bold text-lg text-pink-600 mb-4">
@@ -84,6 +84,19 @@ export default function HomePage() {
                 </li>
               ))}
             </ul>
+          </Card>
+
+          <Card className="p-4">
+            <h3 className="flex items-center font-bold text-lg text-pink-600 mb-4">
+              <User className="w-4 h-4 mr-2 text-pink-600" /> 人気カテゴリー
+            </h3>
+            <div className="grid grid-cols-2 gap-2">
+              {["#芸能", "#スポーツ", "#経済", "#コラム", "#音楽", "#社会"].map((tag) => (
+                <span key={tag} className="text-sm border border-pink-200 text-pink-600 rounded-full px-3 py-1">
+                  {tag}
+                </span>
+              ))}
+            </div>
           </Card>
         </aside>
       </section>
