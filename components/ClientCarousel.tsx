@@ -1,9 +1,11 @@
+// components/ClientCarousel.tsx
+
 "use client";
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
-export type Article = {
+type Article = {
   id: number;
   title: string;
   image: string;

@@ -39,7 +39,7 @@ const featuredArticles = allArticles.slice(0, 20);
 const popularArticles = allArticles.slice(0, 4);
 
 // カルーセルをクライアント専用に分離
-const ClientCarousel = dynamic(() => import("@/components/ClientCarousel"), { ssr: false });
+import ClientCarousel from "@/components/ClientCarousel";
 
 export default function HomePage() {
   return (
