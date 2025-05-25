@@ -1,7 +1,8 @@
 import type { MetadataRoute } from "next"
+Sitemap: https://v0-wo-zeta.vercel.app/sitemap.xml
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = "https://trend-news.com" // 実際のドメインに変更してください
+  const baseUrl = "https://v0-wo-zeta.vercel.app/" // 実際のドメインに変更してください
 
   return {
     rules: [
