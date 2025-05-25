@@ -1,11 +1,9 @@
-"use client";
-
-import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Star, Flame, User, ArrowLeft, ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import dynamic from "next/dynamic";
 
 function formatTimeAgo(dateString: string): string {
   const now = new Date();
@@ -19,7 +17,7 @@ function formatTimeAgo(dateString: string): string {
 }
 
 // 記事の型定義
-type Article = {
+export type Article = {
   id: number;
   title: string;
   description: string;
@@ -29,7 +27,7 @@ type Article = {
   publishedAt: string;
 };
 
-// import.meta.glob を使ってすべての JSON を一括読み込み
+// JSONを動的に読み込む
 const modules = import.meta.glob("../**/articles/*.json", { eager: true }) as Record<string, { default: Article }>;
 const dynamicArticles: Article[] = Object.values(modules).map((m) => m.default);
 
@@ -40,27 +38,10 @@ const allArticles = dynamicArticles
 const featuredArticles = allArticles.slice(0, 20);
 const popularArticles = allArticles.slice(0, 4);
 
+// カルーセルをクライアント専用に分離
+const ClientCarousel = dynamic(() => import("@/components/ClientCarousel"), { ssr: false });
+
 export default function HomePage() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [scrollIndex, setScrollIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setScrollIndex((prev) => (prev + 1) % featuredArticles.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    const container = containerRef.current;
-    if (container) {
-      container.scrollTo({
-        left: scrollIndex * 160,
-        behavior: "smooth",
-      });
-    }
-  }, [scrollIndex]);
-
   return (
     <div className="bg-pink-50 py-10 px-4 md:px-12 w-full overflow-x-hidden">
       <style>{`
@@ -94,31 +75,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="relative overflow-hidden mb-12">
-        <div
-          className="flex space-x-4 px-4 transition-all duration-500 ease-in-out"
-          ref={containerRef}
-          style={{ width: "100%", overflowX: "auto" }}
-        >
-          {featuredArticles.map((article) => (
-            <div key={article?.id} className="w-48 flex-shrink-0">
-              <div className="relative w-full h-28">
-                {article?.image && (
-                  <Image
-                    src={article.image}
-                    alt="記事画像"
-                    fill
-                    className="object-cover rounded-md"
-                  />
-                )}
-              </div>
-              <p className="text-sm mt-2 text-center text-gray-700">
-                {article?.title?.slice(0, 10)}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* カルーセル */}
+      <ClientCarousel featuredArticles={featuredArticles} />
 
       <section className="w-full max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
         <div className="md:col-span-2">
@@ -127,7 +85,7 @@ export default function HomePage() {
           </h2>
 
           <div className="space-y-6">
-            {popularArticles.map((article, index) => (
+            {popularArticles.map((article) => (
               <Card key={article.id} className="flex flex-col md:flex-row overflow-hidden">
                 <div className="w-full md:w-1/3 h-60 relative">
                   <Image
