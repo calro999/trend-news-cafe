@@ -1,30 +1,19 @@
-"use client"
-
-import { useEffect, useState } from "react"
+import fs from "fs"
+import path from "path"
 import { Badge } from "@/components/ui/badge"
 import { Star, Flame, User } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import Image from "next/image"
 
 export default function NewsPage() {
-  const [articles, setArticles] = useState([])
+  const newsDir = path.join(process.cwd(), "app/news/news")
+  const fileNames = fs.readdirSync(newsDir).filter(name => name.startsWith("news") && name.endsWith(".json"))
 
-  useEffect(() => {
-    async function loadArticles() {
-      const files = import.meta.glob("/app/news/news/news*.json")
-      const loaded = await Promise.all(
-        Object.entries(files).map(async ([, resolver]) => {
-          const mod = await resolver()
-          return mod.default || mod
-        })
-      )
-      const sorted = loaded.sort((a, b) => {
-        return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
-      })
-      setArticles(sorted)
-    }
-    loadArticles()
-  }, [])
+  const articles = fileNames.map(name => {
+    const filePath = path.join(newsDir, name)
+    const fileContent = fs.readFileSync(filePath, "utf8")
+    return JSON.parse(fileContent)
+  }).sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
 
   return (
     <div className="bg-pink-50 py-10 px-4 w-full">
