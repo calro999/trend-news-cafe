@@ -3,6 +3,18 @@ import { Star, Flame, User } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import Image from "next/image"
 
+// 時間表示用の関数
+function formatTimeAgo(dateString: string): string {
+  const now = new Date();
+  const date = new Date(dateString);
+  const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
+  const hours = Math.floor(diff / 3600);
+  if (hours < 1) return "1時間以内";
+  if (hours < 24) return `${hours}時間前`;
+  const days = Math.floor(hours / 24);
+  return `${days}日前`;
+}
+
 import * as allArticles from "./articles/index"
 
 const articles = Object.values(allArticles).sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
@@ -75,7 +87,7 @@ export default function ColumnPage() {
                     {article.title}
                     <div className="mt-1"><Badge className="bg-pink-100 text-pink-600">{article.category}</Badge></div>
                   </div>
-                  <span className="text-gray-400 text-xs">{article.time || "1時間前"}</span>
+                  <span className="text-gray-400 text-xs">{formatTimeAgo(article.publishedAt)}</span>
                 </li>
               ))}
             </ul>
