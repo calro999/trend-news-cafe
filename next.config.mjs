@@ -9,6 +9,7 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-}
+  transpilePackages: ['next-mdx-remote'], // この行を追加しました
+};
 
-export default nextConfig
+export default nextConfig;
