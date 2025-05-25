@@ -3,10 +3,10 @@ import { Star, Flame, User } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import Image from "next/image"
 
-import news1 from "./articles/news1.json"
-import news2 from "./articles/news2.json"
+// すべてのJSONファイルをインポート
+import * as allArticles from "./articles/index"
 
-const articles = [news1, news2].sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+const articles = Object.values(allArticles).sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
 
 export default function NewsPage() {
   return (
