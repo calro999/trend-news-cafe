@@ -1,9 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Badge } from "@/components/ui/badge";
-import { Star, ArrowLeft, ArrowRight } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -19,15 +16,10 @@ const allArticles = [
   ...Object.values(sportsArticles ?? {}),
   ...Object.values(economyArticles ?? {}),
   ...Object.values(columnArticles ?? {}),
-].sort((a, b) => {
-  const dateA = new Date(a?.publishedAt || 0).getTime();
-  const dateB = new Date(b?.publishedAt || 0).getTime();
-  return dateB - dateA;
-});
+].sort((a, b) => new Date(b?.publishedAt || 0).getTime() - new Date(a?.publishedAt || 0).getTime());
 
 const featuredArticles = allArticles.slice(0, 20);
 const popularArticles = allArticles.slice(0, 10);
-const recentArticles = allArticles.slice(0, 3);
 
 export default function HomePage() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -51,7 +43,7 @@ export default function HomePage() {
   }, [scrollIndex]);
 
   return (
-    <div className="bg-pink-50 py-10 px-0 w-full overflow-x-hidden">
+    <div className="bg-pink-50 py-10 px-4 md:px-12 w-full overflow-x-hidden">
       <style>{`
         .animated-gradient {
           background: linear-gradient(270deg, #f472b6, #ec4899, #8b5cf6, #f472b6);
@@ -109,79 +101,68 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="px-4 md:px-12 mt-12">
-        <h2 className="text-xl font-bold text-pink-600 mb-6">人気記事ランキング</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-white/70 p-6 rounded-lg">
-          {popularArticles.map((article, index) => (
-            <Link
-              href={article?.url || "#"}
-              key={article?.id}
-              className="flex items-start space-x-4 hover:bg-pink-100/40 rounded-lg p-4 transition"
-            >
-              <div className="w-32 h-20 relative flex-shrink-0">
-                {article?.image && (
-                  <Image
-                    src={article.image}
-                    alt="記事画像"
-                    fill
-                    className="object-cover rounded-md"
-                  />
-                )}
-              </div>
-              <div className="flex flex-col">
-                <span className="text-sm text-pink-400 font-bold">#{index + 1}</span>
-                <h3 className="text-base font-semibold text-gray-800 leading-snug">
-                  {article?.title}
-                </h3>
-                <div className="flex flex-wrap gap-2 mt-1">
-                  {(article?.tags || []).slice(0, 2).map((tag) => (
-                    <span key={tag} className="text-xs bg-pink-100 text-pink-600 px-2 py-0.5 rounded-full">
-                      #{tag}
-                    </span>
-                  ))}
+      <section className="grid md:grid-cols-[1fr_300px] gap-8">
+        <div>
+          <h2 className="text-xl font-bold text-pink-600 mb-4">人気記事ランキング</h2>
+          <div className="grid gap-6">
+            {popularArticles.map((article, index) => (
+              <Link
+                key={article?.id}
+                href={article?.url || "#"}
+                className="flex bg-white rounded-lg shadow hover:bg-pink-50 transition overflow-hidden"
+              >
+                <div className="relative w-32 h-24 flex-shrink-0">
+                  {article?.image && (
+                    <Image
+                      src={article.image}
+                      alt="記事画像"
+                      fill
+                      className="object-cover rounded-l-lg"
+                    />
+                  )}
                 </div>
-                <span className="text-xs text-gray-500 mt-1">
-                  {new Date(article?.publishedAt).toLocaleDateString("ja-JP")}
-                </span>
-              </div>
-            </Link>
-          ))}
+                <div className="p-4 flex-1">
+                  <span className="text-sm text-pink-400 font-bold">#{index + 1}</span>
+                  <h3 className="text-base font-semibold text-gray-800 leading-snug">
+                    {article?.title}
+                  </h3>
+                  <div className="flex flex-wrap gap-2 mt-1">
+                    {(article?.tags || []).slice(0, 2).map((tag) => (
+                      <span
+                        key={tag}
+                        className="text-xs bg-pink-100 text-pink-600 px-2 py-0.5 rounded-full"
+                      >
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {new Date(article?.publishedAt).toLocaleDateString("ja-JP")}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
-      </section>
 
-      <section className="px-6 md:px-12 mt-16">
-        <h2 className="text-xl font-semibold text-pink-600 mb-4">新着記事</h2>
-        <div className="grid gap-6">
-          {recentArticles.map((article) => (
-            <Link
-              key={article?.id}
-              href={article?.url || "#"}
-              className="grid grid-cols-1 sm:grid-cols-[150px_1fr] sm:grid-cols-2 md:grid-cols-[150px_1fr] gap-4 bg-white hover:bg-pink-50 transition p-4 rounded-lg shadow"
-            >
-              <div className="relative w-full h-28 sm:h-24">
-                {article?.image && (
-                  <Image
-                    src={article.image}
-                    alt="記事画像"
-                    fill
-                    className="object-cover rounded-md"
-                  />
-                )}
-              </div>
-              <div>
-                <h3 className="text-base font-medium text-gray-800">
-                  {article?.title}
-                </h3>
-                <p className="text-xs text-gray-500 mt-1">
-                  {new Date(article?.publishedAt).toLocaleDateString("ja-JP")}
-                </p>
-                <span className="inline-block mt-2 text-sm text-pink-600 font-semibold">
-                  続きを読む →
-                </span>
-              </div>
-            </Link>
-          ))}
-        </div>
+        <aside className="space-y-6">
+          <div className="bg-white p-4 rounded-lg shadow">
+            <h3 className="text-lg font-bold text-pink-600 mb-2">最新情報をお届け</h3>
+            <p className="text-sm text-gray-700">
+              トレンドカフェは、話題のニュースやエンタメ情報を毎日更新中！フォローして最新情報をチェック♪
+            </p>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow">
+            <h3 className="text-lg font-bold text-pink-600 mb-2">人気カテゴリー</h3>
+            <ul className="text-sm text-gray-700 space-y-1">
+              <li>#エンタメ</li>
+              <li>#ニュース</li>
+              <li>#スポーツ</li>
+              <li>#経済</li>
+              <li>#コラム</li>
+            </ul>
+          </div>
+        </aside>
       </section>
     </div>
   );
