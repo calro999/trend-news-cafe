@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { Star, Flame, User } from "lucide-react";
+import { Star, Flame, User, ArrowLeft, ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 import * as newsArticles from "@/app/news/articles/index";
@@ -22,7 +22,7 @@ const allArticles = [
 ].sort((a, b) => new Date(b?.publishedAt || 0).getTime() - new Date(a?.publishedAt || 0).getTime());
 
 const featuredArticles = allArticles.slice(0, 20);
-const popularArticles = allArticles.slice(0, 10);
+const popularArticles = allArticles.slice(0, 4);
 
 export default function HomePage() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -137,6 +137,15 @@ export default function HomePage() {
               </Card>
             ))}
           </div>
+
+          <div className="flex justify-between mt-8">
+            <button className="bg-white border border-pink-300 text-pink-600 px-4 py-2 rounded hover:bg-pink-100">
+              <ArrowLeft className="w-4 h-4" />
+            </button>
+            <button className="bg-white border border-pink-300 text-pink-600 px-4 py-2 rounded hover:bg-pink-100">
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
 
         <aside className="space-y-6">
@@ -145,7 +154,7 @@ export default function HomePage() {
               <Flame className="w-4 h-4 mr-2 text-pink-600" /> 最新情報をお届け
             </h3>
             <ul className="space-y-4 text-sm">
-              {allArticles.slice(0, 5).map((article) => (
+              {allArticles.slice(0, 12).map((article) => (
                 <li key={article.id} className="flex justify-between items-start">
                   <div>
                     {article.title}
