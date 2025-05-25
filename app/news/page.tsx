@@ -11,8 +11,13 @@ export default function NewsPage() {
 
   useEffect(() => {
     async function loadArticles() {
-      const context = require.context("@/data/news", false, /news.*\.json$/)
-      const loaded = context.keys().map((key) => context(key))
+      const files = import.meta.glob("../../data/news/news*.json")
+      const loaded = await Promise.all(
+        Object.entries(files).map(async ([path, resolver]) => {
+          const mod = await resolver()
+          return mod.default || mod
+        })
+      )
       const sorted = loaded.sort((a, b) => {
         return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
       })
