@@ -138,10 +138,11 @@ export default function HomePage() {
             ))}
           </div>
 
-          <div className="flex justify-between mt-8">
+          <div className="flex justify-center items-center gap-2 mt-8">
             <button className="bg-white border border-pink-300 text-pink-600 px-4 py-2 rounded hover:bg-pink-100">
               <ArrowLeft className="w-4 h-4" />
             </button>
+            <div className="text-pink-600 font-bold">1 / 5</div>
             <button className="bg-white border border-pink-300 text-pink-600 px-4 py-2 rounded hover:bg-pink-100">
               <ArrowRight className="w-4 h-4" />
             </button>
