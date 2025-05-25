@@ -18,6 +18,7 @@ function formatTimeAgo(dateString: string): string {
   return `${days}日前`;
 }
 
+// 記事の型定義
 type Article = {
   id: number;
   title: string;
@@ -28,15 +29,16 @@ type Article = {
   publishedAt: string;
 };
 
-const context = (require as any).context("./", true, /articles\/.*\.json$/);
-const dynamicArticles: Article[] = context
-  .keys()
-  .map((key: string) => context(key))
-  .filter((a: any) => a && a.publishedAt)
-  .sort((a: Article, b: Article) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+// import.meta.glob を使ってすべての JSON を一括読み込み
+const modules = import.meta.glob<{ default: Article }>("../**/articles/*.json", { eager: true });
+const dynamicArticles: Article[] = Object.values(modules).map((m) => (m as { default: Article }).default);
 
-const featuredArticles = dynamicArticles.slice(0, 20);
-const popularArticles = dynamicArticles.slice(0, 4);
+const allArticles = dynamicArticles
+  .filter((a) => a && a.publishedAt)
+  .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+
+const featuredArticles = allArticles.slice(0, 20);
+const popularArticles = allArticles.slice(0, 4);
 
 export default function HomePage() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -80,7 +82,9 @@ export default function HomePage() {
         <h1 className="text-3xl md:text-5xl font-bold">
           <span className="animated-gradient">今話題の トレンド情報 をお届け</span>
         </h1>
-        <p className="mt-4 text-gray-600">芸能界からYouTuberまで、様々なジャンルの最新トレンドを可愛く楽しくお伝えします♪</p>
+        <p className="mt-4 text-gray-600">
+          芸能界からYouTuberまで、様々なジャンルの最新トレンドを可愛く楽しくお伝えします♪
+        </p>
         <div className="mt-4 flex flex-wrap justify-center gap-2 text-sm">
           {["#YouTuber", "#芸能", "#ファッション", "#音楽", "#ドラマ", "#バラエティ", "#SNS", "#トレンド"].map((tag) => (
             <span key={tag} className="bg-pink-100 text-pink-600 px-3 py-1 rounded-full">
@@ -99,15 +103,17 @@ export default function HomePage() {
           {featuredArticles.map((article) => (
             <div key={article?.id} className="w-48 flex-shrink-0">
               <div className="relative w-full h-28">
-                <Image
-                  src={article.image}
-                  alt="記事画像"
-                  fill
-                  className="object-cover rounded-md"
-                />
+                {article?.image && (
+                  <Image
+                    src={article.image}
+                    alt="記事画像"
+                    fill
+                    className="object-cover rounded-md"
+                  />
+                )}
               </div>
               <p className="text-sm mt-2 text-center text-gray-700">
-                {article.title.slice(0, 10)}
+                {article?.title?.slice(0, 10)}
               </p>
             </div>
           ))}
@@ -121,16 +127,21 @@ export default function HomePage() {
           </h2>
 
           <div className="space-y-6">
-            {popularArticles.map((article) => (
+            {popularArticles.map((article, index) => (
               <Card key={article.id} className="flex flex-col md:flex-row overflow-hidden">
                 <div className="w-full md:w-1/3 h-60 relative">
-                  <Image src={article.image} alt="記事画像" fill className="object-cover" />
+                  <Image
+                    src={article.image}
+                    alt="記事画像"
+                    fill
+                    className="object-cover"
+                  />
                 </div>
                 <CardContent className="p-4 flex flex-col justify-between md:w-2/3">
                   <div>
                     <div className="flex gap-2 mb-2">
                       <Badge variant="outline" className="bg-pink-100 text-pink-600">{article.category}</Badge>
-                      <span className="text-sm text-gray-500">{article.readTime}</span>
+                      <span className="text-sm text-gray-500">{article.readTime || "1分"}</span>
                     </div>
                     <h3 className="font-bold text-lg mb-1">{article.title}</h3>
                     <p className="text-sm text-gray-600">{article.description}</p>
@@ -142,9 +153,60 @@ export default function HomePage() {
               </Card>
             ))}
           </div>
+
+          <div className="flex justify-center items-center gap-2 mt-8">
+            <button className="bg-white border border-pink-300 text-pink-600 px-4 py-2 rounded hover:bg-pink-100">
+              <ArrowLeft className="w-4 h-4" />
+            </button>
+            <div className="text-pink-600 font-bold">1 / 5</div>
+            <button className="bg-white border border-pink-300 text-pink-600 px-4 py-2 rounded hover:bg-pink-100">
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
 
-        {/* サイドバーの例略 */}
+        <aside className="space-y-6">
+          <Card className="p-4">
+            <h3 className="flex items-center font-bold text-lg text-pink-600 mb-4">
+              <Flame className="w-4 h-4 mr-2 text-pink-600" /> 最新情報をお届け
+            </h3>
+            <ul className="space-y-4 text-sm">
+              {allArticles.slice(0, 12).map((article) => (
+                <li key={article.id} className="flex justify-between items-start">
+                  <div>
+                    {article.title}
+                    <div className="mt-1">
+                      <Badge className="bg-pink-100 text-pink-600">{article.category}</Badge>
+                    </div>
+                  </div>
+                  <span className="text-gray-400 text-xs">{formatTimeAgo(article.publishedAt)}</span>
+                </li>
+              ))}
+            </ul>
+          </Card>
+
+          <Card className="p-4">
+            <h3 className="flex items-center font-bold text-lg text-pink-600 mb-4">
+              <User className="w-4 h-4 mr-2 text-pink-600" /> 人気カテゴリー
+            </h3>
+            <div className="grid grid-cols-2 gap-2">
+              {["#芸能", "#音楽", "#ドラマ", "#ファッション"].map((tag) => (
+                <span key={tag} className="text-sm border border-pink-200 text-pink-600 rounded-full px-3 py-1">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </Card>
+
+          <Card className="p-6 bg-gradient-to-r from-pink-100 to-pink-200 text-center">
+            <div className="text-pink-600 text-2xl mb-2">♡</div>
+            <p className="font-bold mb-1">最新情報をお届け</p>
+            <p className="text-sm text-gray-600 mb-4">メルマガ登録で芸能ニュースをいち早くゲット！</p>
+            <button className="bg-pink-500 text-white px-4 py-2 rounded-full hover:bg-pink-600 transition">
+              メルマガ登録
+            </button>
+          </Card>
+        </aside>
       </section>
     </div>
   );

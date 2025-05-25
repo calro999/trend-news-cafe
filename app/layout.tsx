@@ -20,6 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ja">
       <head>
         <link rel="icon" href="/favicon.ico" />
+        <meta name="google-site-verification" content="DkCMrOjpxPVzY0T8G34bKQQDsDP9Biu83kk2wfz5hz4" />
       </head>
       <body className={inter.className} style={{ maxWidth: "100%", margin: 0, padding: 0 }}>
         {/* Header */}
