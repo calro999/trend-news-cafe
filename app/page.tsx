@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge"
-import { Star, Flame, User } from "lucide-react"
+import { Star, Flame, User, ArrowLeft, ArrowRight } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import Image from "next/image"
 
@@ -16,9 +16,10 @@ const allArticles = [
   ...Object.values(sportsArticles),
   ...Object.values(economyArticles),
   ...Object.values(columnArticles),
-]
-  .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
-  .slice(0, 6) // 最新6件
+].sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+
+const latestArticles = allArticles.slice(0, 3)
+const popularArticles = allArticles.slice(3, 6) // 仮で人気記事として表示（アクセス数管理未実装）
 
 export default function HomePage() {
   return (
@@ -39,7 +40,7 @@ export default function HomePage() {
           </h2>
 
           <div className="space-y-6">
-            {allArticles.map((article) => (
+            {latestArticles.map((article) => (
               <Card key={article.id} className="flex flex-col md:flex-row overflow-hidden">
                 <div className="w-full md:w-1/3 h-60 relative">
                   <Image
@@ -65,6 +66,56 @@ export default function HomePage() {
               </Card>
             ))}
           </div>
+
+          <div className="flex justify-between items-center mt-6">
+            <button className="text-pink-600 hover:text-pink-800">
+              <ArrowLeft />
+            </button>
+            <button className="text-pink-600 hover:text-pink-800">
+              <ArrowRight />
+            </button>
+          </div>
+
+          <h2 className="flex items-center text-pink-600 font-bold text-xl mt-12 mb-4">
+            <Star className="mr-2 fill-yellow-500 text-white" /> 人気記事
+          </h2>
+
+          <div className="space-y-6">
+            {popularArticles.map((article) => (
+              <Card key={article.id} className="flex flex-col md:flex-row overflow-hidden">
+                <div className="w-full md:w-1/3 h-60 relative">
+                  <Image
+                    src={article.image}
+                    alt="記事画像"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <CardContent className="p-4 flex flex-col justify-between md:w-2/3">
+                  <div>
+                    <div className="flex gap-2 mb-2">
+                      <Badge variant="outline" className="bg-yellow-100 text-yellow-600">{article.category}</Badge>
+                      <span className="text-sm text-gray-500">{article.readTime}</span>
+                    </div>
+                    <h3 className="font-bold text-lg mb-1">{article.title}</h3>
+                    <p className="text-sm text-gray-600">{article.description}</p>
+                  </div>
+                  <div className="mt-4 text-right">
+                    <a href="#" className="text-yellow-600 hover:underline">続きを読む →</a>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          <div className="flex justify-between items-center mt-6">
+            <button className="text-yellow-600 hover:text-yellow-800">
+              <ArrowLeft />
+            </button>
+            <button className="text-yellow-600 hover:text-yellow-800">
+              <ArrowRight />
+            </button>
+          </div>
         </div>
 
         {/* サイドバー */}
@@ -74,7 +125,7 @@ export default function HomePage() {
               <Flame className="w-4 h-4 mr-2 text-pink-600" /> 最新情報
             </h3>
             <ul className="space-y-4 text-sm">
-              {allArticles.map((article) => (
+              {allArticles.slice(0, 6).map((article) => (
                 <li key={article.id} className="flex justify-between items-start">
                   <div>
                     {article.title}
