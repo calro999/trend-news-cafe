@@ -1,49 +1,53 @@
-"use client"
+"use client";
 
-import { useEffect, useRef, useState } from "react"
-import { Badge } from "@/components/ui/badge"
-import { Star, ArrowLeft, ArrowRight } from "lucide-react"
-import { Card, CardContent } from "@/components/ui/card"
-import Image from "next/image"
-import Link from "next/link"
+import { useEffect, useRef, useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Star, ArrowLeft, ArrowRight } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import Image from "next/image";
+import Link from "next/link";
 
-import * as newsArticles from "@/app/news/articles/index"
-import * as entArticles from "@/app/entertainment/articles/index"
-import * as sportsArticles from "@/app/sports/articles/index"
-import * as economyArticles from "@/app/economy/articles/index"
-import * as columnArticles from "@/app/column/articles/index"
+import * as newsArticles from "@/app/news/articles/index";
+import * as entArticles from "@/app/entertainment/articles/index";
+import * as sportsArticles from "@/app/sports/articles/index";
+import * as economyArticles from "@/app/economy/articles/index";
+import * as columnArticles from "@/app/column/articles/index";
 
 const allArticles = [
-  ...Object.values(newsArticles),
-  ...Object.values(entArticles),
-  ...Object.values(sportsArticles),
-  ...Object.values(economyArticles),
-  ...Object.values(columnArticles),
-].sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+  ...Object.values(newsArticles ?? {}),
+  ...Object.values(entArticles ?? {}),
+  ...Object.values(sportsArticles ?? {}),
+  ...Object.values(economyArticles ?? {}),
+  ...Object.values(columnArticles ?? {}),
+].sort((a, b) => {
+  const dateA = new Date(a?.publishedAt || 0).getTime();
+  const dateB = new Date(b?.publishedAt || 0).getTime();
+  return dateB - dateA;
+});
 
-const featuredArticles = allArticles.slice(0, 20)
-const popularArticles = allArticles.slice(0, 10) // 仮に同じ記事を人気記事とする（将来的にアクセス数でソート可）
+const featuredArticles = allArticles.slice(0, 20);
+const popularArticles = allArticles.slice(0, 10);
 
 export default function HomePage() {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const [scrollIndex, setScrollIndex] = useState(0)
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [scrollIndex, setScrollIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setScrollIndex((prev) => (prev + 1) % featuredArticles.length)
-    }, 5000) // 5秒ごとに1枚進む
-    return () => clearInterval(interval)
-  }, [])
+      setScrollIndex((prev) => (prev + 1) % featuredArticles.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
-    const container = containerRef.current
+    const container = containerRef.current;
     if (container) {
       container.scrollTo({
         left: scrollIndex * 160,
         behavior: "smooth",
-      })
+      });
     }
-  }, [scrollIndex])
+  }, [scrollIndex]);
 
   return (
     <div className="bg-pink-50 py-10 px-0 w-full overflow-x-hidden">
@@ -66,18 +70,11 @@ export default function HomePage() {
         <h1 className="text-3xl md:text-5xl font-bold">
           <span className="animated-gradient">今話題の トレンド情報 をお届け</span>
         </h1>
-        <p className="mt-4 text-gray-600">芸能界からYouTuberまで、様々なジャンルの最新トレンドを可愛く楽しくお伝えします♪</p>
+        <p className="mt-4 text-gray-600">
+          芸能界からYouTuberまで、様々なジャンルの最新トレンドを可愛く楽しくお伝えします♪
+        </p>
         <div className="mt-4 flex flex-wrap justify-center gap-2 text-sm">
-          {[
-            "#YouTuber",
-            "#芸能",
-            "#ファッション",
-            "#音楽",
-            "#ドラマ",
-            "#バラエティ",
-            "#SNS",
-            "#トレンド"
-          ].map((tag) => (
+          {["#YouTuber", "#芸能", "#ファッション", "#音楽", "#ドラマ", "#バラエティ", "#SNS", "#トレンド"].map((tag) => (
             <span key={tag} className="bg-pink-100 text-pink-600 px-3 py-1 rounded-full">
               {tag}
             </span>
@@ -92,17 +89,19 @@ export default function HomePage() {
           style={{ width: "100%", overflowX: "auto" }}
         >
           {featuredArticles.map((article) => (
-            <div key={article.id} className="w-48 flex-shrink-0">
+            <div key={article?.id} className="w-48 flex-shrink-0">
               <div className="relative w-full h-28">
-                <Image
-                  src={article.image}
-                  alt="記事画像"
-                  fill
-                  className="object-cover rounded-md"
-                />
+                {article?.image && (
+                  <Image
+                    src={article.image}
+                    alt="記事画像"
+                    fill
+                    className="object-cover rounded-md"
+                  />
+                )}
               </div>
               <p className="text-sm mt-2 text-center text-gray-700">
-                {article.title.slice(0, 10)}
+                {article?.title?.slice(0, 10)}
               </p>
             </div>
           ))}
@@ -113,14 +112,17 @@ export default function HomePage() {
         <h2 className="text-xl font-semibold text-pink-600 mb-4">人気記事ランキング</h2>
         <ul className="space-y-3">
           {popularArticles.map((article, index) => (
-            <li key={article.id} className="border-b pb-2">
-              <Link href={article.url} className="text-gray-800 hover:text-pink-600 font-medium">
-                {index + 1}. {article.title}
+            <li key={article?.id} className="border-b pb-2">
+              <Link
+                href={article?.url || "#"}
+                className="text-gray-800 hover:text-pink-600 font-medium"
+              >
+                {index + 1}. {article?.title}
               </Link>
             </li>
           ))}
         </ul>
       </section>
     </div>
-  )
+  );
 }
