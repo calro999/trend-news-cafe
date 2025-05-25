@@ -41,7 +41,7 @@ export default function HomePage() {
   }, [index])
 
   return (
-    <div className="bg-pink-50 py-10 px-0 w-screen max-w-none overflow-x-hidden">
+    <div className="bg-pink-50 py-10 px-0 w-full max-w-full overflow-x-hidden">
       <style>{`
         .animated-gradient {
           background: linear-gradient(270deg, #f472b6, #ec4899, #8b5cf6, #f472b6);
@@ -63,18 +63,32 @@ export default function HomePage() {
         </h1>
         <p className="mt-4 text-gray-600">芸能界からYouTuberまで、様々なジャンルの最新トレンドを可愛く楽しくお伝えします♪</p>
         <div className="mt-4 flex flex-wrap justify-center gap-2 text-sm">
-          {["#YouTuber", "#芸能", "#ファッション", "#音楽", "#ドラマ", "#バラエティ", "#SNS", "#トレンド"].map(tag => (
-            <span key={tag} className="bg-pink-100 text-pink-600 px-3 py-1 rounded-full">{tag}</span>
+          {[
+            "#YouTuber",
+            "#芸能",
+            "#ファッション",
+            "#音楽",
+            "#ドラマ",
+            "#バラエティ",
+            "#SNS",
+            "#トレンド"
+          ].map((tag) => (
+            <span key={tag} className="bg-pink-100 text-pink-600 px-3 py-1 rounded-full">
+              {tag}
+            </span>
           ))}
         </div>
       </section>
 
       <section className="relative overflow-hidden">
-        <div className="flex overflow-x-hidden scroll-smooth snap-x snap-mandatory" ref={carouselRef}>
+        <div
+          className="flex overflow-x-hidden scroll-smooth snap-x snap-mandatory"
+          ref={carouselRef}
+        >
           {featuredArticles.map((article, i) => (
             <div
               key={article.id}
-              className="flex-shrink-0 w-full snap-start md:w-2/3 lg:w-1/2 relative h-72 md:h-96"
+              className="flex-shrink-0 w-full snap-start md:w-full relative h-72 md:h-96"
             >
               <Image src={article.image} alt="記事画像" fill className="object-cover" />
               <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-4">
