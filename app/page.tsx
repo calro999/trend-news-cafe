@@ -26,11 +26,16 @@ export default function HomePage() {
     <div className="bg-pink-50 py-10 px-4 w-full">
       <section className="text-center mb-10">
         <h1 className="text-3xl md:text-5xl font-bold text-pink-600">
-          Trend Cafe へようこそ！
+          今話題の トレンド情報 をお届け
         </h1>
         <p className="mt-4 text-gray-600">
-          旬な話題をまとめ読み。各カテゴリの最新記事をチェック！
+          芸能界からYouTuberまで、様々なジャンルの最新トレンドを可愛く楽しくお伝えします♪
         </p>
+        <div className="mt-4 flex flex-wrap justify-center gap-2 text-sm">
+          {['#YouTuber', '#芸能', '#ファッション', '#音楽', '#ドラマ', '#バラエティ', '#SNS', '#トレンド'].map(tag => (
+            <span key={tag} className="bg-pink-100 text-pink-600 px-3 py-1 rounded-full">{tag}</span>
+          ))}
+        </div>
       </section>
 
       <section className="w-full max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -142,7 +147,7 @@ export default function HomePage() {
               <User className="w-4 h-4 mr-2 text-pink-600" /> 人気カテゴリー
             </h3>
             <div className="grid grid-cols-2 gap-2">
-              {["#芸能", "#スポーツ", "#経済", "#コラム", "#音楽", "#社会"].map((tag) => (
+              {["#YouTuber", "#芸能", "#ファッション", "#音楽", "#ドラマ", "#トレンド"].map((tag) => (
                 <span key={tag} className="text-sm border border-pink-200 text-pink-600 rounded-full px-3 py-1">
                   {tag}
                 </span>
@@ -153,7 +158,7 @@ export default function HomePage() {
           <Card className="p-6 bg-gradient-to-r from-pink-100 to-pink-200 text-center">
             <div className="text-pink-600 text-2xl mb-2">♡</div>
             <p className="font-bold mb-1">最新情報をお届け</p>
-            <p className="text-sm text-gray-600 mb-4">メルマガ登録で話題の記事を見逃さない！</p>
+            <p className="text-sm text-gray-600 mb-4">トレンド情報を見逃さないように、メルマガ登録をお忘れなく♪</p>
             <button className="bg-pink-500 text-white px-4 py-2 rounded-full hover:bg-pink-600 transition">
               メルマガ登録
             </button>
