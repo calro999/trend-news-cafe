@@ -1,3 +1,5 @@
+"use client"
+
 import { useEffect, useRef, useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Star, ArrowLeft, ArrowRight } from "lucide-react"
