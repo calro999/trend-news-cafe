@@ -98,6 +98,15 @@ export default function HomePage() {
               ))}
             </div>
           </Card>
+
+          <Card className="p-6 bg-gradient-to-r from-pink-100 to-pink-200 text-center">
+            <div className="text-pink-600 text-2xl mb-2">♡</div>
+            <p className="font-bold mb-1">最新情報をお届け</p>
+            <p className="text-sm text-gray-600 mb-4">メルマガ登録で話題の記事を見逃さない！</p>
+            <button className="bg-pink-500 text-white px-4 py-2 rounded-full hover:bg-pink-600 transition">
+              メルマガ登録
+            </button>
+          </Card>
         </aside>
       </section>
     </div>
