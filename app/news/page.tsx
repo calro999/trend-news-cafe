@@ -1,38 +1,26 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Star, Flame, User } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import Image from "next/image"
 
-const newsArticles = [
-  {
-    id: 1,
-    title: "俳優Aと女優Bの熱愛報道にSNS騒然",
-    description: "大手メディアがスクープした芸能界のカップル誕生に関して、関係者の証言とファンの反応をまとめました。",
-    image: "/sample.jpg",
-    category: "芸能",
-    readTime: "3分で読める",
-  },
-  {
-    id: 2,
-    title: "人気アイドルが活動休止を発表",
-    description: "多忙による体調不良が原因とされるが、復帰時期やファンへのメッセージを紹介します。",
-    image: "/sample.jpg",
-    category: "芸能",
-    readTime: "2分で読める",
-  },
-  {
-    id: 3,
-    title: "話題の女優が新ドラマで主演決定",
-    description: "2025年秋ドラマで主演に抜擢された人気女優のコメントとドラマのあらすじをご紹介。",
-    image: "/sample.jpg",
-    category: "芸能",
-    readTime: "2分で読める",
-  }
-]
-
 export default function NewsPage() {
+  const [articles, setArticles] = useState([])
+
+  useEffect(() => {
+    async function loadArticles() {
+      const context = require.context("@/data/news", false, /news.*\.json$/)
+      const loaded = context.keys().map((key) => context(key))
+      const sorted = loaded.sort((a, b) => {
+        return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+      })
+      setArticles(sorted)
+    }
+    loadArticles()
+  }, [])
+
   return (
     <div className="bg-pink-50 py-10 px-4 w-full">
       <section className="text-center mb-10">
@@ -51,7 +39,7 @@ export default function NewsPage() {
           </h2>
 
           <div className="space-y-6">
-            {newsArticles.map((article) => (
+            {articles.map((article) => (
               <Card key={article.id} className="flex flex-col md:flex-row overflow-hidden">
                 <div className="w-full md:w-1/3 h-60 relative">
                   <Image
@@ -95,14 +83,15 @@ export default function NewsPage() {
               <Flame className="w-4 h-4 mr-2 text-pink-600" /> 最新情報
             </h3>
             <ul className="space-y-4 text-sm">
-              <li className="flex justify-between items-start">
-                <div>俳優Xの舞台裏インタビュー<div className="mt-1"><Badge className="bg-pink-100 text-pink-600">芸能</Badge></div></div>
-                <span className="text-gray-400 text-xs">3時間前</span>
-              </li>
-              <li className="flex justify-between items-start">
-                <div>女優Yの結婚報道に各界の反応<div className="mt-1"><Badge className="bg-pink-100 text-pink-600">芸能</Badge></div></div>
-                <span className="text-gray-400 text-xs">6時間前</span>
-              </li>
+              {articles.map((article) => (
+                <li key={article.id} className="flex justify-between items-start">
+                  <div>
+                    {article.title}
+                    <div className="mt-1"><Badge className="bg-pink-100 text-pink-600">{article.category}</Badge></div>
+                  </div>
+                  <span className="text-gray-400 text-xs">{article.time || "1時間前"}</span>
+                </li>
+              ))}
             </ul>
           </Card>
 
