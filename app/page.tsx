@@ -27,6 +27,7 @@ const allArticles = [
 
 const featuredArticles = allArticles.slice(0, 20);
 const popularArticles = allArticles.slice(0, 10);
+const recentArticles = allArticles.slice(0, 3);
 
 export default function HomePage() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -108,20 +109,69 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="px-6 md:px-12">
-        <h2 className="text-xl font-semibold text-pink-600 mb-4">人気記事ランキング</h2>
-        <ul className="space-y-3">
+      <section className="px-4 md:px-12 mt-12">
+        <h2 className="text-xl font-bold text-pink-600 mb-6">人気記事ランキング</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {popularArticles.map((article, index) => (
-            <li key={article?.id} className="border-b pb-2">
-              <Link
-                href={article?.url || "#"}
-                className="text-gray-800 hover:text-pink-600 font-medium"
-              >
-                {index + 1}. {article?.title}
-              </Link>
-            </li>
+            <Link
+              href={article?.url || "#"}
+              key={article?.id}
+              className="flex items-start space-x-4 hover:bg-pink-100/40 rounded-lg p-3 transition"
+            >
+              <div className="w-20 h-16 relative flex-shrink-0">
+                {article?.image && (
+                  <Image
+                    src={article.image}
+                    alt="記事画像"
+                    fill
+                    className="object-cover rounded-md"
+                  />
+                )}
+              </div>
+              <div className="flex flex-col">
+                <span className="text-sm text-pink-400 font-bold">#{index + 1}</span>
+                <h3 className="text-sm font-semibold text-gray-800 leading-snug">
+                  {article?.title}
+                </h3>
+                <span className="text-xs text-gray-500 mt-1">
+                  {new Date(article?.publishedAt).toLocaleDateString("ja-JP")}
+                </span>
+              </div>
+            </Link>
           ))}
-        </ul>
+        </div>
+      </section>
+
+      <section className="px-6 md:px-12 mt-12">
+        <h2 className="text-xl font-semibold text-pink-600 mb-4">新着記事</h2>
+        <div className="space-y-6">
+          {recentArticles.map((article) => (
+            <Link
+              key={article?.id}
+              href={article?.url || "#"}
+              className="flex items-center space-x-4 hover:bg-white/50 p-4 rounded-lg transition"
+            >
+              <div className="w-32 h-20 relative flex-shrink-0">
+                {article?.image && (
+                  <Image
+                    src={article.image}
+                    alt="記事画像"
+                    fill
+                    className="object-cover rounded-md"
+                  />
+                )}
+              </div>
+              <div>
+                <h3 className="text-md font-medium text-gray-800">
+                  {article?.title}
+                </h3>
+                <p className="text-xs text-gray-500 mt-1">
+                  {new Date(article?.publishedAt).toLocaleDateString("ja-JP")}
+                </p>
+              </div>
+            </Link>
+          ))}
+        </div>
       </section>
     </div>
   );
