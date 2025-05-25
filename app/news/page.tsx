@@ -11,9 +11,9 @@ export default function NewsPage() {
 
   useEffect(() => {
     async function loadArticles() {
-      const files = import.meta.glob("../../data/news/news*.json")
+      const files = import.meta.glob("/app/news/news/news*.json")
       const loaded = await Promise.all(
-        Object.entries(files).map(async ([path, resolver]) => {
+        Object.entries(files).map(async ([, resolver]) => {
           const mod = await resolver()
           return mod.default || mod
         })
@@ -85,7 +85,7 @@ export default function NewsPage() {
         <aside className="space-y-6">
           <Card className="p-4">
             <h3 className="flex items-center font-bold text-lg text-pink-600 mb-4">
-              <Flame className="w-4 h-4 mr-2 text-pink-600" /> 最新情報
+              <Flame className="w-4 h-4 mr-2 text-pink-600" /> ニュース記事最新情報
             </h3>
             <ul className="space-y-4 text-sm">
               {articles.map((article) => (
