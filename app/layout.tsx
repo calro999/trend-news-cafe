@@ -1,6 +1,4 @@
-// layout.tsx：ヘッダー＋ナビゲーション追加済みバージョン
-"use client"
-
+// layout.tsx：修正済み（metadataと"use client"の競合を解消）
 import { Inter } from "next/font/google"
 import "@/styles/globals.css"
 import { cn } from "@/lib/utils"
