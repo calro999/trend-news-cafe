@@ -1,8 +1,17 @@
-// components/ClientCarouselWrapper.tsx
 "use client";
 
 import dynamic from "next/dynamic";
-import { Article } from "@/app/entertainment/page"; // または適切な型定義の場所に応じて変更
+
+// 🔽 ここで直接型定義（再利用しないならこれで十分）
+type Article = {
+  id: number;
+  title: string;
+  description: string;
+  image: string;
+  category: string;
+  readTime: string;
+  publishedAt: string;
+};
 
 const ClientCarousel = dynamic(() => import("@/components/ClientCarousel"), {
   ssr: false,
