@@ -30,8 +30,8 @@ type Article = {
 };
 
 // import.meta.glob を使ってすべての JSON を一括読み込み
-const modules = import.meta.glob<{ default: Article }>("../**/articles/*.json", { eager: true });
-const dynamicArticles: Article[] = Object.values(modules).map((m) => (m as { default: Article }).default);
+const modules = import.meta.glob("../**/articles/*.json", { eager: true }) as Record<string, { default: Article }>;
+const dynamicArticles: Article[] = Object.values(modules).map((m) => m.default);
 
 const allArticles = dynamicArticles
   .filter((a) => a && a.publishedAt)
