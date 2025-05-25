@@ -24,9 +24,24 @@ const popularArticles = allArticles.slice(3, 6) // 仮で人気記事として�
 export default function HomePage() {
   return (
     <div className="bg-pink-50 py-10 px-4 w-full">
+      <style>{`
+        .animated-gradient {
+          background: linear-gradient(270deg, #f472b6, #ec4899, #8b5cf6, #f472b6);
+          background-size: 800% 800%;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          animation: gradientFlow 10s ease infinite;
+        }
+
+        @keyframes gradientFlow {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+      `}</style>
       <section className="text-center mb-10">
         <h1 className="text-3xl md:text-5xl font-bold">
-          <span className="bg-gradient-to-r from-pink-500 via-pink-400 to-pink-600 bg-clip-text text-transparent">
+          <span className="animated-gradient">
             今話題の トレンド情報 をお届け
           </span>
         </h1>
@@ -34,7 +49,7 @@ export default function HomePage() {
           芸能界からYouTuberまで、様々なジャンルの最新トレンドを可愛く楽しくお伝えします♪
         </p>
         <div className="mt-4 flex flex-wrap justify-center gap-2 text-sm">
-          {['#YouTuber', '#芸能', '#ファッション', '#音楽', '#ドラマ', '#バラエティ', '#SNS', '#トレンド'].map(tag => (
+          {["#YouTuber", "#芸能", "#ファッション", "#音楽", "#ドラマ", "#バラエティ", "#SNS", "#トレンド"].map(tag => (
             <span key={tag} className="bg-pink-100 text-pink-600 px-3 py-1 rounded-full">{tag}</span>
           ))}
         </div>
