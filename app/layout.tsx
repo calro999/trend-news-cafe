@@ -1,69 +1,75 @@
-// layout.tsx：修正済み（metadataと"use client"の競合を解消）
-import { Inter } from "next/font/google"
-import "@/styles/globals.css"
-import { cn } from "@/lib/utils"
-import { NavigationMenu, NavigationMenuItem, NavigationMenuList, NavigationMenuLink } from "@/components/ui/navigation-menu"
-import Link from "next/link"
+"use client"
 
-const inter = Inter({ subsets: ["latin"] })
+import { Badge } from "@/components/ui/badge"
+import { Star } from "lucide-react"
+import { Card, CardContent } from "@/components/ui/card"
+import { format } from "date-fns"
+import ja from "date-fns/locale/ja"
+import Image from "next/image"
 
-export const metadata = {
-  title: "Trend Cafe",
-  description: "最新トレンドを毎日チェック！",
-}
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function Home() {
   return (
-    <html lang="ja">
-      <body className={cn("min-h-screen bg-white font-sans antialiased", inter.className)}>
-        {/* ヘッダー */}
-        <header className="bg-white border-b">
-          <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
-            <h1 className="text-xl font-bold text-gray-800">
-              <Link href="/">Trend Cafe</Link>
-            </h1>
-            {/* ナビゲーションメニュー */}
-            <NavigationMenu>
-              <NavigationMenuList>
-                <NavigationMenuItem>
-                  <Link href="/news" legacyBehavior passHref>
-                    <NavigationMenuLink className="px-4 py-2 hover:text-blue-600">ニュース</NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <Link href="/entertainment" legacyBehavior passHref>
-                    <NavigationMenuLink className="px-4 py-2 hover:text-blue-600">エンタメ</NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <Link href="/sports" legacyBehavior passHref>
-                    <NavigationMenuLink className="px-4 py-2 hover:text-blue-600">スポーツ</NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <Link href="/economy" legacyBehavior passHref>
-                    <NavigationMenuLink className="px-4 py-2 hover:text-blue-600">経済</NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <Link href="/column" legacyBehavior passHref>
-                    <NavigationMenuLink className="px-4 py-2 hover:text-blue-600">コラム</NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
-          </div>
-        </header>
+    <div className="bg-pink-50 py-10 px-4">
+      {/* ヒーローセクション */}
+      <section className="text-center mb-10">
+        <h1 className="text-3xl md:text-5xl font-bold text-pink-600">
+          今話題の <span className="text-fuchsia-600">トレンド情報</span> をお届け
+        </h1>
+        <p className="mt-4 text-gray-600">
+          芸能界からYouTuberまで、様々なジャンルの最新トレンドを可愛く楽しくお伝えします♪
+        </p>
+        <div className="mt-4 flex flex-wrap justify-center gap-2">
+          {[
+            "#YouTuber",
+            "#芸能",
+            "#ファッション",
+            "#音楽",
+            "#ドラマ",
+            "#バラエティ",
+            "#SNS",
+            "#トレンド",
+          ].map((tag) => (
+            <Badge key={tag} variant="outline" className="bg-pink-100 text-pink-600">
+              {tag}
+            </Badge>
+          ))}
+        </div>
+      </section>
 
-        {/* メインエリア */}
-        <main className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
-          {children}
-        </main>
-      </body>
-    </html>
+      {/* 注目記事セクション */}
+      <section className="max-w-screen-lg mx-auto">
+        <h2 className="flex items-center text-pink-600 font-bold text-xl mb-4">
+          <Star className="mr-2 fill-pink-500 text-white" /> 注目記事
+        </h2>
+
+        <Card className="flex flex-col md:flex-row overflow-hidden">
+          <div className="w-full md:w-1/3 h-48 relative">
+            <Image
+              src="/sample.jpg"
+              alt="サンプル画像"
+              fill
+              className="object-cover"
+            />
+          </div>
+          <CardContent className="p-4 md:w-2/3">
+            <div className="flex gap-2 mb-2">
+              <Badge variant="outline" className="bg-pink-100 text-pink-600">芸能</Badge>
+              <span className="text-sm text-gray-500">2分で読める</span>
+            </div>
+            <h3 className="font-bold text-lg mb-1">
+              芸能界に新たなカップル誕生？熱愛報道の真相に迫る
+            </h3>
+            <p className="text-sm text-gray-600">
+              人気俳優と女優の熱愛が報じられ、ファンの間で大きな話題に。関係者によると二人の交際は…
+            </p>
+            <div className="mt-2 text-right">
+              <a href="#" className="text-pink-600 hover:underline">
+                続きを読む →
+              </a>
+            </div>
+          </CardContent>
+        </Card>
+      </section>
+    </div>
   )
 }
