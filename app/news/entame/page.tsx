@@ -3,7 +3,7 @@ import { Star, Flame, User } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import Image from "next/image"
 
-import * as allArticles from "./entame/index"
+import * as allArticles from "./articles/index"
 
 const articles = Object.values(allArticles).sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
 
