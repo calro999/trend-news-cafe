@@ -20,9 +20,29 @@ const allArticles = [
   ...Object.values(columnArticles),
 ].sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
 
-const featuredArticles = allArticles.slice(0, 5)
+const featuredArticles = allArticles.slice(0, 20)
 
 export default function HomePage() {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [scrollIndex, setScrollIndex] = useState(0)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setScrollIndex((prev) => (prev + 1) % featuredArticles.length)
+    }, 5000) // 5秒ごとに1枚進む
+    return () => clearInterval(interval)
+  }, [])
+
+  useEffect(() => {
+    const container = containerRef.current
+    if (container) {
+      container.scrollTo({
+        left: scrollIndex * 160, // w-48 = 192px（ただしスペースを引いて160で調整）
+        behavior: "smooth",
+      })
+    }
+  }, [scrollIndex])
+
   return (
     <div className="bg-pink-50 py-10 px-0 w-full overflow-x-hidden">
       <style>{`
@@ -64,7 +84,11 @@ export default function HomePage() {
       </section>
 
       <section className="relative overflow-hidden">
-        <div className="flex overflow-x-auto space-x-4 px-4">
+        <div
+          className="flex space-x-4 px-4 transition-all duration-500 ease-in-out"
+          ref={containerRef}
+          style={{ width: "100%", overflowX: "auto" }}
+        >
           {featuredArticles.map((article) => (
             <div key={article.id} className="w-48 flex-shrink-0">
               <div className="relative w-full h-28">
