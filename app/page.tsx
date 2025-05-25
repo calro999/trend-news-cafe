@@ -27,6 +27,7 @@ async function getAllPostsMeta() {
   const filenames = fs.readdirSync(postsDirectory);
 
   const posts = filenames
+    .filter(filename => filename.endsWith('.mdx')) // ★この行を追加しました！
     .map((filename) => {
       const filePath = path.join(postsDirectory, filename);
       const fileContent = fs.readFileSync(filePath, 'utf8');
