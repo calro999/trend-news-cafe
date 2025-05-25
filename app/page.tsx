@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Star, ArrowLeft, ArrowRight } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import Image from "next/image"
+import Link from "next/link"
 
 import * as newsArticles from "@/app/news/articles/index"
 import * as entArticles from "@/app/entertainment/articles/index"
@@ -21,6 +22,7 @@ const allArticles = [
 ].sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
 
 const featuredArticles = allArticles.slice(0, 20)
+const popularArticles = allArticles.slice(0, 10) // 仮に同じ記事を人気記事とする（将来的にアクセス数でソート可）
 
 export default function HomePage() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -37,7 +39,7 @@ export default function HomePage() {
     const container = containerRef.current
     if (container) {
       container.scrollTo({
-        left: scrollIndex * 160, // w-48 = 192px（ただしスペースを引いて160で調整）
+        left: scrollIndex * 160,
         behavior: "smooth",
       })
     }
@@ -83,7 +85,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden mb-12">
         <div
           className="flex space-x-4 px-4 transition-all duration-500 ease-in-out"
           ref={containerRef}
@@ -105,6 +107,19 @@ export default function HomePage() {
             </div>
           ))}
         </div>
+      </section>
+
+      <section className="px-6 md:px-12">
+        <h2 className="text-xl font-semibold text-pink-600 mb-4">人気記事ランキング</h2>
+        <ul className="space-y-3">
+          {popularArticles.map((article, index) => (
+            <li key={article.id} className="border-b pb-2">
+              <Link href={article.url} className="text-gray-800 hover:text-pink-600 font-medium">
+                {index + 1}. {article.title}
+              </Link>
+            </li>
+          ))}
+        </ul>
       </section>
     </div>
   )
