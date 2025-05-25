@@ -111,14 +111,14 @@ export default function HomePage() {
 
       <section className="px-4 md:px-12 mt-12">
         <h2 className="text-xl font-bold text-pink-600 mb-6">人気記事ランキング</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-white/70 p-6 rounded-lg">
           {popularArticles.map((article, index) => (
             <Link
               href={article?.url || "#"}
               key={article?.id}
               className="flex items-start space-x-4 hover:bg-pink-100/40 rounded-lg p-3 transition"
             >
-              <div className="w-20 h-16 relative flex-shrink-0">
+              <div className="w-24 h-16 relative flex-shrink-0">
                 {article?.image && (
                   <Image
                     src={article.image}
@@ -142,16 +142,16 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="px-6 md:px-12 mt-12">
+      <section className="px-6 md:px-12 mt-16">
         <h2 className="text-xl font-semibold text-pink-600 mb-4">新着記事</h2>
-        <div className="space-y-6">
+        <div className="grid gap-6">
           {recentArticles.map((article) => (
             <Link
               key={article?.id}
               href={article?.url || "#"}
-              className="flex items-center space-x-4 hover:bg-white/50 p-4 rounded-lg transition"
+              className="grid grid-cols-[120px_1fr] gap-4 bg-white/90 hover:bg-white/100 p-4 rounded-lg shadow"
             >
-              <div className="w-32 h-20 relative flex-shrink-0">
+              <div className="relative w-full h-24">
                 {article?.image && (
                   <Image
                     src={article.image}
