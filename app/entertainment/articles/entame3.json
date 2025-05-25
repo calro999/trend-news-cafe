@@ -1,10 +1,10 @@
 {
-    "id": 3,
-    "title": "3えんためだよー",
-    "description": "えんため最新情報ができたよ。",
-    "image": "/sample.jpg",
-    "category": "芸能",
-    "readTime": "2分で読める",
-    "publishedAt": "2025-05-25T16:04:00"
-  }
-  
+  "id": 3,
+  "title": "きほらモデル、学生ランウェイ出演",
+  "description": "関コレに登場",
+  "image": "/kiho.jpg",
+  "category": "エンタメ",
+  "readTime": "2分で読める",
+  "publishedAt": "2025-05-25T00:00:00",
+  "body": "バラエティ番組『CHANCE ＆ CHANGE』に出演中のキャバ嬢・きほさんら25人が、『KANSAI COLLECTION』プロデュースの学生ランウェイイベント『GAKUSEI RUNWAY 2025 SUMMER』に登場しました。riendaやLIP SERVICEのファッションステージにモデルとして参加し、会場を盛り上げました。"
+}
