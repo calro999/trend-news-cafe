@@ -41,7 +41,7 @@ export default function HomePage() {
   }, [index])
 
   return (
-    <div className="bg-pink-50 py-10 px-0 w-full max-w-full overflow-x-hidden">
+    <div className="bg-pink-50 py-10 px-0 w-full max-w-screen-2xl mx-auto overflow-x-hidden">
       <style>{`
         .animated-gradient {
           background: linear-gradient(270deg, #f472b6, #ec4899, #8b5cf6, #f472b6);
