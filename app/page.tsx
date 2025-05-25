@@ -1,49 +1,45 @@
-"use client"
-
 import { Badge } from "@/components/ui/badge"
 import { Star, Flame, User } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import Image from "next/image"
-import articles from "@/data/articles"
 
-export default function Home() {
+// 各カテゴリから記事をインポート
+import * as newsArticles from "@/app/news/articles/index"
+import * as entArticles from "@/app/entertainment/articles/index"
+import * as sportsArticles from "@/app/sports/articles/index"
+import * as economyArticles from "@/app/economy/articles/index"
+import * as columnArticles from "@/app/column/articles/index"
+
+const allArticles = [
+  ...Object.values(newsArticles),
+  ...Object.values(entArticles),
+  ...Object.values(sportsArticles),
+  ...Object.values(economyArticles),
+  ...Object.values(columnArticles),
+]
+  .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+  .slice(0, 6) // 最新6件
+
+export default function HomePage() {
   return (
     <div className="bg-pink-50 py-10 px-4 w-full">
-      {/* ヒーローセクション */}
       <section className="text-center mb-10">
         <h1 className="text-3xl md:text-5xl font-bold text-pink-600">
-          今話題の <span className="text-fuchsia-600">トレンド情報</span> をお届け
+          Trend Cafe へようこそ！
         </h1>
         <p className="mt-4 text-gray-600">
-          芸能界からYouTuberまで、様々なジャンルの最新トレンドを可愛く楽しくお伝えします♪
+          旬な話題をまとめ読み。各カテゴリの最新記事をチェック！
         </p>
-        <div className="mt-4 flex flex-wrap justify-center gap-2">
-          {[
-            "#YouTuber",
-            "#芸能",
-            "#ファッション",
-            "#音楽",
-            "#ドラマ",
-            "#バラエティ",
-            "#SNS",
-            "#トレンド",
-          ].map((tag) => (
-            <Badge key={tag} variant="outline" className="bg-pink-100 text-pink-600">
-              {tag}
-            </Badge>
-          ))}
-        </div>
       </section>
 
-      {/* メインコンテンツ：注目記事 + サイドバー */}
       <section className="w-full max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
         <div className="md:col-span-2">
           <h2 className="flex items-center text-pink-600 font-bold text-xl mb-4">
-            <Star className="mr-2 fill-pink-500 text-white" /> 注目記事
+            <Star className="mr-2 fill-pink-500 text-white" /> 注目の新着記事
           </h2>
 
           <div className="space-y-6">
-            {articles.map((article) => (
+            {allArticles.map((article) => (
               <Card key={article.id} className="flex flex-col md:flex-row overflow-hidden">
                 <div className="w-full md:w-1/3 h-60 relative">
                   <Image
@@ -59,106 +55,35 @@ export default function Home() {
                       <Badge variant="outline" className="bg-pink-100 text-pink-600">{article.category}</Badge>
                       <span className="text-sm text-gray-500">{article.readTime}</span>
                     </div>
-                    <h3 className="font-bold text-lg mb-1">
-                      {article.title}
-                    </h3>
-                    <p className="text-sm text-gray-600">
-                      {article.description}
-                    </p>
+                    <h3 className="font-bold text-lg mb-1">{article.title}</h3>
+                    <p className="text-sm text-gray-600">{article.description}</p>
                   </div>
                   <div className="mt-4 text-right">
-                    <a href="#" className="text-pink-600 hover:underline">
-                      続きを読む →
-                    </a>
+                    <a href="#" className="text-pink-600 hover:underline">続きを読む →</a>
                   </div>
                 </CardContent>
               </Card>
             ))}
           </div>
-
-          {/* ページネーション */}
-          <div className="flex justify-between mt-8">
-            <button className="bg-white border border-pink-300 text-pink-600 px-4 py-2 rounded hover:bg-pink-100">
-              ＜ 前のページ
-            </button>
-            <button className="bg-white border border-pink-300 text-pink-600 px-4 py-2 rounded hover:bg-pink-100">
-              次のページ ＞
-            </button>
-          </div>
         </div>
 
-        {/* サイドバー */}
+        {/* サイドバーなど追加可能 */}
         <aside className="space-y-6">
           <Card className="p-4">
             <h3 className="flex items-center font-bold text-lg text-pink-600 mb-4">
               <Flame className="w-4 h-4 mr-2 text-pink-600" /> 最新情報
             </h3>
             <ul className="space-y-4 text-sm">
-              <li className="flex justify-between items-start">
-                <div>
-                  人気アイドルグループの新曲がオリコン1位獲得
-                  <div className="mt-1"><Badge className="bg-pink-100 text-pink-600">音楽</Badge></div>
-                </div>
-                <span className="text-gray-400 text-xs">2時間前</span>
-              </li>
-              <li className="flex justify-between items-start">
-                <div>
-                  バラエティ番組で話題のあの人が写真集発売決定
-                  <div className="mt-1"><Badge className="bg-pink-100 text-pink-600">芸能</Badge></div>
-                </div>
-                <span className="text-gray-400 text-xs">4時間前</span>
-              </li>
-              <li className="flex justify-between items-start">
-                <div>
-                  TikTokで大バズり中のダンスチャレンジとは？
-                  <div className="mt-1"><Badge className="bg-pink-100 text-pink-600">SNS</Badge></div>
-                </div>
-                <span className="text-gray-400 text-xs">6時間前</span>
-              </li>
-              <li className="flex justify-between items-start">
-                <div>
-                  人気YouTuberコラボ企画の裏側を大公開
-                  <div className="mt-1"><Badge className="bg-pink-100 text-pink-600">YouTuber</Badge></div>
-                </div>
-                <span className="text-gray-400 text-xs">8時間前</span>
-              </li>
-              <li className="flex justify-between items-start">
-                <div>
-                  今週のドラマ視聴率ランキング発表
-                  <div className="mt-1"><Badge className="bg-pink-100 text-pink-600">ドラマ</Badge></div>
-                </div>
-                <span className="text-gray-400 text-xs">10時間前</span>
-              </li>
-            </ul>
-          </Card>
-
-          <Card className="p-4">
-            <h3 className="flex items-center font-bold text-lg text-pink-600 mb-4">
-              <User className="w-4 h-4 mr-2 text-pink-600" /> 人気カテゴリー
-            </h3>
-            <div className="grid grid-cols-2 gap-2">
-              {[
-                "#YouTuber",
-                "#芸能ニュース",
-                "#トレンド",
-                "#ファッション",
-                "#音楽",
-                "#ドラマ",
-              ].map((tag) => (
-                <span key={tag} className="text-sm border border-pink-200 text-pink-600 rounded-full px-3 py-1">
-                  {tag}
-                </span>
+              {allArticles.map((article) => (
+                <li key={article.id} className="flex justify-between items-start">
+                  <div>
+                    {article.title}
+                    <div className="mt-1"><Badge className="bg-pink-100 text-pink-600">{article.category}</Badge></div>
+                  </div>
+                  <span className="text-gray-400 text-xs">{article.time || "1時間前"}</span>
+                </li>
               ))}
-            </div>
-          </Card>
-
-          <Card className="p-6 bg-gradient-to-r from-pink-100 to-pink-200 text-center">
-            <div className="text-pink-600 text-2xl mb-2">♡</div>
-            <p className="font-bold mb-1">最新情報をお届け</p>
-            <p className="text-sm text-gray-600 mb-4">トレンド情報を見逃さないように、メルマガ登録をお忘れなく♪</p>
-            <button className="bg-pink-500 text-white px-4 py-2 rounded-full hover:bg-pink-600 transition">
-              メルマガ登録
-            </button>
+            </ul>
           </Card>
         </aside>
       </section>
