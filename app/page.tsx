@@ -4,8 +4,35 @@ import { Badge } from "@/components/ui/badge"
 import { Star, Flame, User } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import Image from "next/image"
+import { useState } from "react"
+
+const initialArticles = [
+  {
+    id: 1,
+    title: "芸能界に新たなカップル誕生？熱愛報道の真相に迫る",
+    description: "人気俳優と女優の熱愛が報じられ、ファンの間で大きな話題に。関係者によると二人の交際は…",
+    image: "/sample.jpg",
+    category: "芸能",
+    readTime: "2分で読める",
+  },
+]
 
 export default function Home() {
+  const [articles, setArticles] = useState(initialArticles)
+  const addArticle = () => {
+    setArticles((prev) => [
+      ...prev,
+      {
+        id: prev.length + 1,
+        title: "新着記事タイトル",
+        description: "この記事の概要がここに入ります。",
+        image: "/sample.jpg",
+        category: "新着",
+        readTime: "3分で読める",
+      },
+    ])
+  }
+
   return (
     <div className="bg-pink-50 py-10 px-4 w-full">
       {/* ヒーローセクション */}
@@ -41,35 +68,59 @@ export default function Home() {
             <Star className="mr-2 fill-pink-500 text-white" /> 注目記事
           </h2>
 
-          <Card className="flex flex-col md:flex-row overflow-hidden">
-            <div className="w-full md:w-1/3 h-60 relative">
-              <Image
-                src="/sample.jpg"
-                alt="サンプル画像"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <CardContent className="p-4 flex flex-col justify-between md:w-2/3">
-              <div>
-                <div className="flex gap-2 mb-2">
-                  <Badge variant="outline" className="bg-pink-100 text-pink-600">芸能</Badge>
-                  <span className="text-sm text-gray-500">2分で読める</span>
+          <div className="space-y-6">
+            {articles.map((article) => (
+              <Card key={article.id} className="flex flex-col md:flex-row overflow-hidden">
+                <div className="w-full md:w-1/3 h-60 relative">
+                  <Image
+                    src={article.image}
+                    alt="記事画像"
+                    fill
+                    className="object-cover"
+                  />
                 </div>
-                <h3 className="font-bold text-lg mb-1">
-                  芸能界に新たなカップル誕生？熱愛報道の真相に迫る
-                </h3>
-                <p className="text-sm text-gray-600">
-                  人気俳優と女優の熱愛が報じられ、ファンの間で大きな話題に。関係者によると二人の交際は…
-                </p>
-              </div>
-              <div className="mt-4 text-right">
-                <a href="#" className="text-pink-600 hover:underline">
-                  続きを読む →
-                </a>
-              </div>
-            </CardContent>
-          </Card>
+                <CardContent className="p-4 flex flex-col justify-between md:w-2/3">
+                  <div>
+                    <div className="flex gap-2 mb-2">
+                      <Badge variant="outline" className="bg-pink-100 text-pink-600">{article.category}</Badge>
+                      <span className="text-sm text-gray-500">{article.readTime}</span>
+                    </div>
+                    <h3 className="font-bold text-lg mb-1">
+                      {article.title}
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      {article.description}
+                    </p>
+                  </div>
+                  <div className="mt-4 text-right">
+                    <a href="#" className="text-pink-600 hover:underline">
+                      続きを読む →
+                    </a>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* 記事追加ボタン */}
+          <div className="mt-6">
+            <button
+              onClick={addArticle}
+              className="bg-pink-500 text-white px-4 py-2 rounded hover:bg-pink-600 transition"
+            >
+              新しい記事を追加
+            </button>
+          </div>
+
+          {/* ページネーション */}
+          <div className="flex justify-between mt-8">
+            <button className="bg-white border border-pink-300 text-pink-600 px-4 py-2 rounded hover:bg-pink-100">
+              ＜ 前のページ
+            </button>
+            <button className="bg-white border border-pink-300 text-pink-600 px-4 py-2 rounded hover:bg-pink-100">
+              次のページ ＞
+            </button>
+          </div>
         </div>
 
         {/* サイドバー */}
@@ -115,35 +166,6 @@ export default function Home() {
                 <span className="text-gray-400 text-xs">10時間前</span>
               </li>
             </ul>
-          </Card>
-
-          <Card className="p-4">
-            <h3 className="flex items-center font-bold text-lg text-pink-600 mb-4">
-              <User className="w-4 h-4 mr-2 text-pink-600" /> 人気カテゴリー
-            </h3>
-            <div className="grid grid-cols-2 gap-2">
-              {[
-                "#YouTuber",
-                "#芸能ニュース",
-                "#トレンド",
-                "#ファッション",
-                "#音楽",
-                "#ドラマ",
-              ].map((tag) => (
-                <span key={tag} className="text-sm border border-pink-200 text-pink-600 rounded-full px-3 py-1">
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </Card>
-
-          <Card className="p-6 bg-gradient-to-r from-pink-100 to-pink-200 text-center">
-            <div className="text-pink-600 text-2xl mb-2">♡</div>
-            <p className="font-bold mb-1">最新情報をお届け</p>
-            <p className="text-sm text-gray-600 mb-4">トレンド情報を見逃さないように、メルマガ登録をお忘れなく♪</p>
-            <button className="bg-pink-500 text-white px-4 py-2 rounded-full hover:bg-pink-600 transition">
-              メルマガ登録
-            </button>
           </Card>
         </aside>
       </section>
