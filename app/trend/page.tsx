@@ -79,7 +79,6 @@ export default function TrendPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50">
-      {/* Header */}
       <header className="bg-white/80 backdrop-blur-sm border-b border-pink-100 sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
@@ -92,38 +91,18 @@ export default function TrendPage() {
               </h1>
             </Link>
 
-            {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-6">
               <Link href="/" className="text-gray-700 hover:text-pink-500 transition-colors font-medium">
                 ホーム
               </Link>
-              <Link
-                href="/category/entertainment"
-                className="text-gray-700 hover:text-pink-500 transition-colors font-medium"
-              >
+              <Link href="/entertainment" className="text-gray-700 hover:text-pink-500 transition-colors font-medium">
                 芸能ニュース
-              </Link>
-              <Link
-                href="/category/youtuber"
-                className="text-gray-700 hover:text-pink-500 transition-colors font-medium"
-              >
-                YouTuber
               </Link>
               <Link href="/trend" className="text-pink-500 font-medium border-b-2 border-pink-500">
                 トレンド
               </Link>
-              <Link
-                href="/category/lifestyle"
-                className="text-gray-700 hover:text-pink-500 transition-colors font-medium"
-              >
-                ライフスタイル
-              </Link>
-              <Link href="/contact" className="text-gray-700 hover:text-pink-500 transition-colors font-medium">
-                お問い合わせ
-              </Link>
             </nav>
 
-            {/* Mobile Menu Button */}
             <button
               className="md:hidden p-2 rounded-lg hover:bg-pink-50 transition-colors"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -132,36 +111,17 @@ export default function TrendPage() {
             </button>
           </div>
 
-          {/* Mobile Navigation */}
           {isMenuOpen && (
             <nav className="md:hidden mt-4 pb-4 border-t border-pink-100 pt-4">
               <div className="flex flex-col space-y-3">
                 <Link href="/" className="text-gray-700 hover:text-pink-500 transition-colors font-medium py-2">
                   ホーム
                 </Link>
-                <Link
-                  href="/category/entertainment"
-                  className="text-gray-700 hover:text-pink-500 transition-colors font-medium py-2"
-                >
+                <Link href="/entertainment" className="text-gray-700 hover:text-pink-500 transition-colors font-medium py-2">
                   芸能ニュース
-                </Link>
-                <Link
-                  href="/category/youtuber"
-                  className="text-gray-700 hover:text-pink-500 transition-colors font-medium py-2"
-                >
-                  YouTuber
                 </Link>
                 <Link href="/trend" className="text-pink-500 font-medium py-2">
                   トレンド
-                </Link>
-                <Link
-                  href="/category/lifestyle"
-                  className="text-gray-700 hover:text-pink-500 transition-colors font-medium py-2"
-                >
-                  ライフスタイル
-                </Link>
-                <Link href="/contact" className="text-gray-700 hover:text-pink-500 transition-colors font-medium py-2">
-                  お問い合わせ
                 </Link>
               </div>
             </nav>
@@ -169,7 +129,6 @@ export default function TrendPage() {
         </div>
       </header>
 
-      {/* Hero Section */}
       <section className="py-8 md:py-12 px-4">
         <div className="container mx-auto text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
@@ -187,10 +146,8 @@ export default function TrendPage() {
         </div>
       </section>
 
-      {/* Main Content */}
       <div className="container mx-auto px-4 pb-12">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">
-          {/* Trending Topics */}
           <div className="lg:col-span-3">
             <div className="flex items-center space-x-2 mb-6">
               <Fire className="w-6 h-6 text-red-500" />
@@ -256,9 +213,7 @@ export default function TrendPage() {
             </div>
           </div>
 
-          {/* Sidebar */}
           <div className="lg:col-span-1 space-y-6">
-            {/* Weekly Trends */}
             <Card className="bg-white/80 backdrop-blur-sm border-pink-100">
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2 text-lg">
@@ -291,7 +246,6 @@ export default function TrendPage() {
               </CardContent>
             </Card>
 
-            {/* Hot Categories */}
             <Card className="bg-white/80 backdrop-blur-sm border-pink-100">
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2 text-lg">
@@ -319,7 +273,6 @@ export default function TrendPage() {
               </CardContent>
             </Card>
 
-            {/* Newsletter */}
             <Card className="bg-gradient-to-br from-pink-100 to-purple-100 border-pink-200">
               <CardHeader>
                 <CardTitle className="text-center text-lg">
@@ -340,7 +293,6 @@ export default function TrendPage() {
         </div>
       </div>
 
-      {/* Footer */}
       <footer className="bg-white/90 backdrop-blur-sm border-t border-pink-100 py-8 md:py-12">
         <div className="container mx-auto px-4 text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">

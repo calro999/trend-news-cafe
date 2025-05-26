@@ -1,9 +1,10 @@
-import { Badge } from "@/components/ui/badge"
-import { Star, Flame, User } from "lucide-react"
-import { Card, CardContent } from "@/components/ui/card"
-import Image from "next/image"
+import { Badge } from "@/components/ui/badge";
+import { Star, Flame, User } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import Image from "next/image";
+import Link from "next/link";
+import { getAllArticles } from "@/lib/getAllArticles";
 
-// 相対時間を返す関数を定義
 function formatTimeAgo(dateString: string): string {
   const now = new Date();
   const date = new Date(dateString);
@@ -15,10 +16,8 @@ function formatTimeAgo(dateString: string): string {
   return `${days}日前`;
 }
 
-// すべてのJSONファイルをインポート
-import * as allArticles from "./articles/index"
-
-const articles = Object.values(allArticles).sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+const allArticles = getAllArticles().filter((a) => a.category === "news");
+const articles = allArticles.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
 
 export default function NewsPage() {
   return (
@@ -59,7 +58,7 @@ export default function NewsPage() {
                     <p className="text-sm text-gray-600">{article.description}</p>
                   </div>
                   <div className="mt-4 text-right">
-                    <a href="#" className="text-pink-600 hover:underline">続きを読む →</a>
+                    <Link href={`/article/${article.id}`} className="text-pink-600 hover:underline">続きを読む →</Link>
                   </div>
                 </CardContent>
               </Card>
@@ -119,5 +118,5 @@ export default function NewsPage() {
         </aside>
       </section>
     </div>
-  )
+  );
 }

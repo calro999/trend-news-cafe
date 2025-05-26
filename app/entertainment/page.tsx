@@ -3,7 +3,8 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Star, Flame, User, ArrowLeft, ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import ClientCarouselWrapper from "@/components/ClientCarouselWrapper"; // ✅ ここに変更
+import ClientCarouselWrapper from "@/components/ClientCarouselWrapper";
+import { getAllArticles } from "@/lib/getAllArticles";
 
 function formatTimeAgo(dateString: string): string {
   const now = new Date();
@@ -16,34 +17,9 @@ function formatTimeAgo(dateString: string): string {
   return `${days}日前`;
 }
 
-// 記事の型定義
-export type Article = {
-  id: number;
-  title: string;
-  description: string;
-  image: string;
-  category: string;
-  readTime: string;
-  publishedAt: string;
-};
-
-import * as newsArticles from "@/app/news/articles/index";
-import * as entArticles from "@/app/entertainment/articles/index";
-import * as sportsArticles from "@/app/sports/articles/index";
-import * as economyArticles from "@/app/economy/articles/index";
-import * as columnArticles from "@/app/column/articles/index";
-
-const allArticles: Article[] = [
-  ...Object.values(newsArticles),
-  ...Object.values(entArticles),
-  ...Object.values(sportsArticles),
-  ...Object.values(economyArticles),
-  ...Object.values(columnArticles),
-].filter((a) => a && a.publishedAt)
- .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
-
+const allArticles = getAllArticles();
 const featuredArticles = allArticles.slice(0, 20);
-const popularArticles = allArticles.slice(0, 4);
+const popularArticles = allArticles.filter((a) => a.category === "entertainment").slice(0, 10);
 
 export default function HomePage() {
   return (
@@ -79,7 +55,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ✅ カルーセルをクライアントコンポーネントでレンダリング */}
       <ClientCarouselWrapper featuredArticles={featuredArticles} />
 
       <section className="w-full max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -133,7 +108,7 @@ export default function HomePage() {
               <Flame className="w-4 h-4 mr-2 text-pink-600" /> 最新情報をお届け
             </h3>
             <ul className="space-y-4 text-sm">
-              {allArticles.slice(0, 12).map((article) => (
+              {popularArticles.map((article) => (
                 <li key={article.id} className="flex justify-between items-start">
                   <div>
                     {article.title}

@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Star, Flame, User, ArrowLeft, ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import ClientCarouselWrapper from "@/components/ClientCarouselWrapper";
+import { getAllArticles } from "@/lib/getAllArticles";
 
 function formatTimeAgo(dateString: string): string {
   const now = new Date();
@@ -16,33 +17,7 @@ function formatTimeAgo(dateString: string): string {
   return `${days}日前`;
 }
 
-export type Article = {
-  id: number;
-  title: string;
-  description: string;
-  image: string;
-  category: string;
-  readTime: string;
-  publishedAt: string;
-};
-
-// 🔁 各カテゴリ記事を明示的に静的インポート
-import * as newsArticles from "@/app/news/articles/index";
-import * as entArticles from "@/app/entertainment/articles/index";
-import * as sportsArticles from "@/app/sports/articles/index";
-import * as economyArticles from "@/app/economy/articles/index";
-import * as columnArticles from "@/app/column/articles/index";
-
-// 全記事をまとめて整形
-const allArticles: Article[] = [
-  ...Object.values(newsArticles),
-  ...Object.values(entArticles),
-  ...Object.values(sportsArticles),
-  ...Object.values(economyArticles),
-  ...Object.values(columnArticles),
-].filter((a) => a && a.publishedAt)
- .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
-
+const allArticles = getAllArticles();
 const featuredArticles = allArticles.slice(0, 20);
 const popularArticles = allArticles.slice(0, 4);
 
@@ -80,7 +55,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ✅ クライアント側カルーセル */}
       <ClientCarouselWrapper featuredArticles={featuredArticles} />
 
       <section className="w-full max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">

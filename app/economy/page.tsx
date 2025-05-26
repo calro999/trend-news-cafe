@@ -1,9 +1,9 @@
-import { Badge } from "@/components/ui/badge"
-import { Star, Flame, User } from "lucide-react"
-import { Card, CardContent } from "@/components/ui/card"
-import Image from "next/image"
+import { Badge } from "@/components/ui/badge";
+import { Star, Flame, User } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import Image from "next/image";
+import { getAllArticles } from "@/lib/getAllArticles";
 
-// 相対時間を表示する関数
 function formatTimeAgo(dateString: string): string {
   const now = new Date();
   const date = new Date(dateString);
@@ -15,9 +15,7 @@ function formatTimeAgo(dateString: string): string {
   return `${days}日前`;
 }
 
-import * as allArticles from "./articles/index"
-
-const articles = Object.values(allArticles).sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+const articles = getAllArticles().filter((a) => a.category === "economy");
 
 export default function EconomyPage() {
   return (
@@ -58,7 +56,7 @@ export default function EconomyPage() {
                     <p className="text-sm text-gray-600">{article.description}</p>
                   </div>
                   <div className="mt-4 text-right">
-                    <a href="#" className="text-pink-600 hover:underline">続きを読む →</a>
+                    <a href={`/article/${article.id}`} className="text-pink-600 hover:underline">続きを読む →</a>
                   </div>
                 </CardContent>
               </Card>
@@ -117,5 +115,5 @@ export default function EconomyPage() {
         </aside>
       </section>
     </div>
-  )
+  );
 }

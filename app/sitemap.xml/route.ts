@@ -1,29 +1,26 @@
-import { MetadataRoute } from "next";
-import fs from "fs";
-import path from "path";
+// app/sitemap.xml/route.ts
+import { getAllArticles } from "@/lib/getAllArticles";
 
-export async function GET(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = "https://v0-wo-zeta.vercel.app/";
-  const categories = ["news", "entertainment", "sports", "economy", "column"];
+export async function GET() {
+  const baseUrl = "https://your-domain.com"; // ← あなたのドメインに置き換えてください
+  const articles = getAllArticles();
 
-  const urls = categories.flatMap((category) => {
-    const dirPath = path.join(process.cwd(), "app", category, "articles");
-    const files = fs.readdirSync(dirPath).filter((file) => file.endsWith(".json"));
-
-    return files.map((file) => {
-      const slug = file.replace(/\.json$/, "");
-      return {
-        url: `${baseUrl}/${category}/${slug}`,
-        lastModified: new Date().toISOString(),
-      };
-    });
+  const urls = articles.map((article) => {
+    return `
+      <url>
+        <loc>${baseUrl}/article/${article.id}</loc>
+        <lastmod>${article.publishedAt}</lastmod>
+      </url>`;
   });
 
-  return [
-    {
-      url: baseUrl,
-      lastModified: new Date().toISOString(),
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.join("\n")}
+</urlset>`;
+
+  return new Response(sitemap, {
+    headers: {
+      "Content-Type": "application/xml",
     },
-    ...urls,
-  ];
+  });
 }
