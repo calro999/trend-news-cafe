@@ -25,7 +25,7 @@ const categoryPaths: Record<Category, string> = {
 export function getAllArticles(): Article[] {
   const allArticles: Article[] = [];
 
-  for (const [category, dir] of Object.entries(categoryPaths)) {
+  for (const dir of Object.values(categoryPaths)) {
     const fullDir = path.join(process.cwd(), dir);
     if (!fs.existsSync(fullDir)) continue;
 
@@ -37,10 +37,7 @@ export function getAllArticles(): Article[] {
       try {
         const data = JSON.parse(content);
         if (data && data.id && data.title) {
-          allArticles.push({
-            ...data,
-            category: category as Category,
-          });
+          allArticles.push(data); // ← 上書きせず、そのまま使う！
         }
       } catch (e) {
         console.warn(`Invalid JSON in ${filePath}`);
