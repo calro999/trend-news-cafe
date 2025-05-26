@@ -16,7 +16,7 @@ function formatTimeAgo(dateString: string): string {
   return `${days}日前`;
 }
 
-const allArticles = getAllArticles().filter((a) => a.category === "news");
+const allArticles = getAllArticles().filter((a) => a.category === "ニュース");
 const articles = allArticles.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
 
 export default function NewsPage() {

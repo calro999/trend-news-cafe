@@ -19,7 +19,7 @@ function formatTimeAgo(dateString: string): string {
 
 const allArticles = getAllArticles();
 const featuredArticles = allArticles.slice(0, 20);
-const popularArticles = allArticles.filter((a) => a.category === "entertainment").slice(0, 10);
+const popularArticles = allArticles.filter((a) => a.category === "エンタメ").slice(0, 10);
 
 export default function HomePage() {
   return (

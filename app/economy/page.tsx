@@ -15,7 +15,7 @@ function formatTimeAgo(dateString: string): string {
   return `${days}日前`;
 }
 
-const articles = getAllArticles().filter((a) => a.category === "economy");
+const articles = getAllArticles().filter((a) => a.category === "経済");
 
 export default function EconomyPage() {
   return (
