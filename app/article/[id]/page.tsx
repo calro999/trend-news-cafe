@@ -4,6 +4,29 @@ import Link from "next/link";
 import { getAllArticles } from "@/lib/getAllArticles";
 import type { Article } from "@/lib/getAllArticles";
 
+export const dynamic = "force-dynamic";
+export const generateMetadata = async ({ params }: { params: { id: string } }) => {
+  const articles = await getAllArticles();
+  const article = articles.find((a) => String(a.id) === params.id);
+  if (!article) return {};
+
+  return {
+    title: article.title,
+    description: article.description,
+    openGraph: {
+      title: article.title,
+      description: article.description,
+      images: [{ url: article.image }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: article.title,
+      description: article.description,
+      images: [article.image],
+    },
+  };
+};
+
 export default async function ArticlePage({ params }: { params: { id: string } }) {
   const allArticles: Article[] = await getAllArticles();
   const article = allArticles.find((a) => String(a.id) === params.id);
@@ -14,7 +37,7 @@ export default async function ArticlePage({ params }: { params: { id: string } }
     .filter((a) => a.category === article.category && a.id !== article.id)
     .slice(0, 3);
 
-  const shareUrl = `https://v0-wo-zeta.vercel.app//article/${article.id}`;
+  const shareUrl = `https://yourdomain.com/article/${article.id}`;
   const shareText = encodeURIComponent(`${article.title} - トレンドカフェ`);
   const twitterShare = `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${shareText}`;
   const facebookShare = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
@@ -23,7 +46,7 @@ export default async function ArticlePage({ params }: { params: { id: string } }
     <div className="bg-white py-10 px-4 max-w-3xl mx-auto">
       {/* パンくずリスト */}
       <nav className="text-sm text-gray-500 mb-6">
-        <Link href="/" className="hover:underline">ホーム</Link> &gt; {article.category} &gt; {article.title}
+        <Link href="/" className="hover:underline">ホーム</Link> &gt; <Link href={`/${article.category}`} className="hover:underline">{article.category}</Link> &gt; <span>{article.title}</span>
       </nav>
 
       <h1 className="text-3xl font-bold text-pink-600 mb-4">{article.title}</h1>
