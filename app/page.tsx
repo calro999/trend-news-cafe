@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Star, Flame, User, ArrowLeft, ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import dynamic from "next/dynamic";
+import ClientCarouselWrapper from "@/components/ClientCarouselWrapper";
 
 function formatTimeAgo(dateString: string): string {
   const now = new Date();
@@ -16,7 +16,6 @@ function formatTimeAgo(dateString: string): string {
   return `${days}日前`;
 }
 
-// 記事の型定義
 export type Article = {
   id: number;
   title: string;
@@ -27,19 +26,25 @@ export type Article = {
   publishedAt: string;
 };
 
-// JSONを動的に読み込む
-const modules = import.meta.glob("../**/articles/*.json", { eager: true }) as Record<string, { default: Article }>;
-const dynamicArticles: Article[] = Object.values(modules).map((m) => m.default);
+// 🔁 各カテゴリ記事を明示的に静的インポート
+import * as newsArticles from "@/app/news/articles/index";
+import * as entArticles from "@/app/entertainment/articles/index";
+import * as sportsArticles from "@/app/sports/articles/index";
+import * as economyArticles from "@/app/economy/articles/index";
+import * as columnArticles from "@/app/column/articles/index";
 
-const allArticles = dynamicArticles
-  .filter((a) => a && a.publishedAt)
-  .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+// 全記事をまとめて整形
+const allArticles: Article[] = [
+  ...Object.values(newsArticles),
+  ...Object.values(entArticles),
+  ...Object.values(sportsArticles),
+  ...Object.values(economyArticles),
+  ...Object.values(columnArticles),
+].filter((a) => a && a.publishedAt)
+ .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
 
 const featuredArticles = allArticles.slice(0, 20);
 const popularArticles = allArticles.slice(0, 4);
-
-// カルーセルをクライアント専用に分離
-import ClientCarousel from "@/components/ClientCarousel";
 
 export default function HomePage() {
   return (
@@ -75,8 +80,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* カルーセル */}
-      <ClientCarousel featuredArticles={featuredArticles} />
+      {/* ✅ クライアント側カルーセル */}
+      <ClientCarouselWrapper featuredArticles={featuredArticles} />
 
       <section className="w-full max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
         <div className="md:col-span-2">
