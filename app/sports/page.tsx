@@ -17,7 +17,7 @@ function formatTimeAgo(dateString: string): string {
   return `${days}日前`;
 }
 
-const allArticles = getAllArticles().filter((a) => a.category === "sports");
+const allArticles = getAllArticles().filter((a) => a.category === "スポーツ");
 const articles = allArticles.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
 
 export default function SportsPage() {
