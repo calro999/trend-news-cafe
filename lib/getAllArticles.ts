@@ -10,6 +10,7 @@ export type Article = {
   category: string;
   readTime: string;
   publishedAt: string;
+  content?: string;
 };
 
 export type Category = "news" | "entertainment" | "sports" | "economy" | "column";

@@ -14,6 +14,11 @@ export default async function ArticlePage({ params }: { params: { id: string } }
     .filter((a) => a.category === article.category && a.id !== article.id)
     .slice(0, 3);
 
+  const shareUrl = `https://v0-wo-zeta.vercel.app//article/${article.id}`;
+  const shareText = encodeURIComponent(`${article.title} - トレンドカフェ`);
+  const twitterShare = `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${shareText}`;
+  const facebookShare = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+
   return (
     <div className="bg-white py-10 px-4 max-w-3xl mx-auto">
       {/* パンくずリスト */}
@@ -28,9 +33,16 @@ export default async function ArticlePage({ params }: { params: { id: string } }
         <Image src={article.image} alt={article.title} fill className="object-cover rounded-lg" />
       </div>
 
-      <p className="text-gray-700 text-base leading-relaxed whitespace-pre-line mb-8">
-        {article.description}
-      </p>
+      {/* 本文 */}
+      <div className="text-gray-700 text-base leading-relaxed whitespace-pre-line mb-8">
+        {article.content || article.description}
+      </div>
+
+      {/* SNSシェアボタン */}
+      <div className="flex gap-4 mb-10">
+        <a href={twitterShare} target="_blank" rel="noopener noreferrer" className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full text-sm">Twitterでシェア</a>
+        <a href={facebookShare} target="_blank" rel="noopener noreferrer" className="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded-full text-sm">Facebookでシェア</a>
+      </div>
 
       {/* 関連記事 */}
       {relatedArticles.length > 0 && (
