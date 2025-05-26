@@ -3,6 +3,7 @@ import { Star, Flame, User } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import { getAllArticles } from "@/lib/getAllArticles";
+import type { Article } from "@/types/article";
 
 function formatTimeAgo(dateString: string): string {
   const now = new Date();
@@ -15,9 +16,12 @@ function formatTimeAgo(dateString: string): string {
   return `${days}日前`;
 }
 
-const articles = getAllArticles().filter((a) => a.category === "column");
+export default async function ColumnPage() {
+  const allArticles: Article[] = await getAllArticles();
+  const articles = allArticles
+    .filter((a: Article) => a.category === "コラム")
+    .sort((a: Article, b: Article) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
 
-export default function ColumnPage() {
   return (
     <div className="bg-pink-50 py-10 px-4 w-full">
       <section className="text-center mb-10">
@@ -36,7 +40,7 @@ export default function ColumnPage() {
           </h2>
 
           <div className="space-y-6">
-            {articles.map((article) => (
+            {articles.map((article: Article) => (
               <Card key={article.id} className="flex flex-col md:flex-row overflow-hidden">
                 <div className="w-full md:w-1/3 h-60 relative">
                   <Image
@@ -56,7 +60,7 @@ export default function ColumnPage() {
                     <p className="text-sm text-gray-600">{article.description}</p>
                   </div>
                   <div className="mt-4 text-right">
-                    <a href={`/article/${article.id}`} className="text-pink-600 hover:underline">続きを読む →</a>
+                    <a href="#" className="text-pink-600 hover:underline">続きを読む →</a>
                   </div>
                 </CardContent>
               </Card>
@@ -79,7 +83,7 @@ export default function ColumnPage() {
               <Flame className="w-4 h-4 mr-2 text-pink-600" /> コラム最新情報
             </h3>
             <ul className="space-y-4 text-sm">
-              {articles.map((article) => (
+              {articles.map((article: Article) => (
                 <li key={article.id} className="flex justify-between items-start">
                   <div>
                     {article.title}
