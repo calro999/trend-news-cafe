@@ -37,16 +37,23 @@ export default async function ArticlePage({ params }: { params: { id: string } }
     .filter((a) => a.category === article.category && a.id !== article.id)
     .slice(0, 3);
 
-  const shareUrl = `https://yourdomain.com/article/${article.id}`;
+  const shareUrl = `https://v0-wo-zeta.vercel.app//article/${article.id}`;
   const shareText = encodeURIComponent(`${article.title} - トレンドカフェ`);
   const twitterShare = `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${shareText}`;
   const facebookShare = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+  const instagramShare = `https://www.instagram.com/?url=${encodeURIComponent(shareUrl)}`;
+  const pinterestShare = `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(shareUrl)}&media=${encodeURIComponent(article.image)}&description=${shareText}`;
+  const threadsShare = `https://www.threads.net/intent/post?url=${encodeURIComponent(shareUrl)}&text=${shareText}`;
+
+  const currentIndex = allArticles.findIndex((a) => a.id === article.id);
+  const prevArticle = allArticles[currentIndex + 1];
+  const nextArticle = allArticles[currentIndex - 1];
 
   return (
     <div className="bg-white py-10 px-4 max-w-3xl mx-auto">
       {/* パンくずリスト */}
       <nav className="text-sm text-gray-500 mb-6">
-        <Link href="/" className="hover:underline">ホーム</Link> &gt; <Link href={`/${article.category}`} className="hover:underline">{article.category}</Link> &gt; <span>{article.title}</span>
+        <Link href="/" className="hover:underline">ホーム</Link> &gt; <Link href={`/${article.category.toLowerCase()}`} className="hover:underline">{article.category}</Link> &gt; <span>{article.title}</span>
       </nav>
 
       <h1 className="text-3xl font-bold text-pink-600 mb-4">{article.title}</h1>
@@ -56,15 +63,20 @@ export default async function ArticlePage({ params }: { params: { id: string } }
         <Image src={article.image} alt={article.title} fill className="object-cover rounded-lg" />
       </div>
 
-      {/* 本文 */}
-      <div className="text-gray-700 text-base leading-relaxed whitespace-pre-line mb-8">
-        {article.content || article.description}
+      {/* 本文（段落装飾） */}
+      <div className="text-gray-700 text-base leading-relaxed space-y-6 mb-8">
+        {(article.content || article.description).split("\n").map((p, i) => (
+          <p key={i}>{p}</p>
+        ))}
       </div>
 
       {/* SNSシェアボタン */}
-      <div className="flex gap-4 mb-10">
-        <a href={twitterShare} target="_blank" rel="noopener noreferrer" className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full text-sm">Twitterでシェア</a>
-        <a href={facebookShare} target="_blank" rel="noopener noreferrer" className="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded-full text-sm">Facebookでシェア</a>
+      <div className="flex flex-wrap gap-4 mb-10">
+        <a href={twitterShare} target="_blank" rel="noopener noreferrer" className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full text-sm">Twitter</a>
+        <a href={facebookShare} target="_blank" rel="noopener noreferrer" className="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded-full text-sm">Facebook</a>
+        <a href={instagramShare} target="_blank" rel="noopener noreferrer" className="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-full text-sm">Instagram</a>
+        <a href={pinterestShare} target="_blank" rel="noopener noreferrer" className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-full text-sm">Pinterest</a>
+        <a href={threadsShare} target="_blank" rel="noopener noreferrer" className="bg-black hover:bg-gray-800 text-white px-4 py-2 rounded-full text-sm">Threads</a>
       </div>
 
       {/* 関連記事 */}
@@ -83,6 +95,16 @@ export default async function ArticlePage({ params }: { params: { id: string } }
           </ul>
         </section>
       )}
+
+      {/* ページネーション */}
+      <div className="flex justify-between mt-10">
+        {prevArticle ? (
+          <Link href={`/article/${prevArticle.id}`} className="text-pink-600 hover:underline">← 前の記事</Link>
+        ) : <span />}
+        {nextArticle ? (
+          <Link href={`/article/${nextArticle.id}`} className="text-pink-600 hover:underline">次の記事 →</Link>
+        ) : <span />}
+      </div>
     </div>
   );
 }
